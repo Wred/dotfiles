@@ -1,0 +1,42 @@
+# Lines configured by zsh-newuser-install
+HISTFILE=~/.histfile
+HISTSIZE=10000
+SAVEHIST=10000
+bindkey -e
+
+zstyle :compinstall filename '/home/andre/.zshrc'
+
+autoload -Uz compinit
+compinit
+
+# colorls
+source $(dirname $(gem which colorls))/tab_complete.sh
+alias ls='colorls --gs'
+alias ll='ls -1Al --sd'
+
+source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+autoload -U +X bashcompinit && bashcompinit
+complete -o nospace -C /usr/local/bin/vault vault
+
+autoload -U +X compinit && compinit
+source <(kubectl completion zsh)
+
+complete -o nospace -C /usr/local/bin/mc mc
+source ~/powerlevel10k/powerlevel10k.zsh-theme
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# Kind completion
+source <(kind completion zsh)
+
+eval "$(direnv hook zsh)"
+
+export PATH="$HOME/.poetry/bin:$PATH"
+
+eval "$(pyenv virtualenv-init -)"
