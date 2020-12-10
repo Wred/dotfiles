@@ -1,0 +1,22 @@
+{{ if (eq .chezmoi.os "darwin" "linux") -}}
+#!/bin/bash
+
+set -eufo pipefail
+
+# set default terminal is terminator
+gsettings set org.gnome.desktop.default-applications.terminal exec /usr/bin/terminator
+gsettings set org.gnome.desktop.default-applications.terminal exec-arg "-x"
+## TODO: set default font (see font for default profile in ${HOME}/.config/terminator/config)
+
+# install powerlevel10k
+version="v1.14.3"
+destdir="${HOME}/powerlevel10k"
+rm -rf ${destdir}
+mkdir -p ${destdir}
+curl -s -L https://github.com/romkatv/powerlevel10k/archive/${version}.tar.gz | tar -C ${destdir} --strip-components=1 -xzf -
+
+# install colorls
+sudo apt install -y ruby-full
+gem install colorls
+
+{{ end -}}

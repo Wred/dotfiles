@@ -26,9 +26,11 @@ complete -o nospace -C /usr/local/bin/vault vault
 autoload -U +X compinit && compinit
 source <(kubectl completion zsh)
 
+# minio client
 complete -o nospace -C /usr/local/bin/mc mc
-source ~/powerlevel10k/powerlevel10k.zsh-theme
 
+# powerlevel10k
+source ~/powerlevel10k/powerlevel10k.zsh-theme
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
