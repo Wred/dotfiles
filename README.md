@@ -31,19 +31,35 @@ chezmoi apply
 ```
 
 
-## GPG keys
+## GPG
 
-### Backup
+Using GPG for signing commits in git.
 
+## List keys
+
+Public keys:
+```sh
+gpg -k --keyid-format LONG
 ```
+
+Private keys:
+```sh
+gpg -K --keyid-format LONG
+```
+
+*Note*: the ID is only listed in `LONG` format (after the slash)
+
+### Backup keys
+
+```sh
 gpg --armor --export > pgp-public-keys.asc
 gpg --armor --export-secret-keys > pgp-private-keys.asc
 gpg --export-ownertrust > pgp-ownertrust.asc
 ```
 
-### Restore
+### Restore keys
 
-```
+```sh
 gpg --import pgp-public-keys.asc
 gpg --import pgp-private-keys.asc
 gpg --import-ownertrust pgp-ownertrust.asc
