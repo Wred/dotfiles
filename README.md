@@ -21,13 +21,6 @@ Install git
 sudo apt-get install git
 ```
 
-Generate an ssh key for this env.
-```
-ssh-keygen
-```
-
-Add key to github account.
-
 Initialize chezmoi and apply
 ```
 chezmoi init --apply --verbose git@github.com:Wred/dotfiles.git
