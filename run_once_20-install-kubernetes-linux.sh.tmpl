@@ -3,6 +3,7 @@
 
 set -efuo pipefail
 
+{{if (eq .chezmoi.osRelease.id "ubuntu") -}}
 # install azure-cli, docker, google-cloud-sdk, helm, and kubectl
 # https://docs.docker.com/engine/install/ubuntu/
 # https://docs.microsoft.com/en-us/cli/azure/install-azure-cli-apt
@@ -28,12 +29,12 @@ curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add
 curl -sL https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
 
 # add sources
-echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/azure-cli.list
+echo "deb [arch={{ .chezmoi.arch }}] https://packages.microsoft.com/repos/azure-cli/ $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/azure-cli.list
 echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
-echo "deb https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
+echo "deb https://baltocdn.com/helm/stable/{{ .chezmoi.osRelease.idLike }}/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-{{ .chezmoi.osRelease.idLike }}.list
 echo "deb https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee /etc/apt/sources.list.d/google-cloud-sdk.list
 sudo add-apt-repository \
-   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+   "deb [arch={{ .chezmoi.arch }}] https://download.docker.com/linux/ubuntu \
    $(lsb_release -cs) \
    stable"
 
@@ -47,10 +48,23 @@ sudo apt-get install --yes \
 	google-cloud-sdk \
 	helm \
 	kubectl
+{{- end}}
+
+[ -d ~/.zsh/completion/ ] || mkdir -p ~/.zsh/completion/
 
 # install eksctl
 # https://eksctl.io/introduction/#installation
-curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_{{ .chezmoi.os }}_{{ .chezmoi.arch }}.tar.gz" | tar xz -C /tmp
 sudo mv /tmp/eksctl /usr/local/bin
-eksctl completion zsh | sudo tee /usr/local/share/zsh/site-functions/_eksctl > /dev/null
+eksctl completion zsh > ~/.zsh/completion/_eksctl
+
+# install kind
+GO111MODULE="on" go get sigs.k8s.io/kind@v0.9.0
+
+# add shell completion for kubectl
+kubectl completion zsh > ~/.zsh/completion/_kubectl
+
+# add shell completion for kind
+kind completion zsh  > ~/.zsh/completion/_kind
+
 {{ end }}

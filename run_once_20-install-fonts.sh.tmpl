@@ -1,7 +1,8 @@
-{{ if (eq .chezmoi.os "darwin" "linux") -}}
+{{ if (eq .chezmoi.os "linux") -}}
 #!/bin/bash
 
 mkdir -p ~/.local/share/fonts
 cd ~/.local/share/fonts && curl -fLo "Droid Sans Mono for Powerline Nerd Font Complete.otf" https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/DroidSansMono/complete/Droid%20Sans%20Mono%20Nerd%20Font%20Complete.otf
+fc-cache -rv  # update font cache
 
 {{ end -}}

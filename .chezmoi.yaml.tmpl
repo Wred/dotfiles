@@ -1,0 +1,8 @@
+{{- $email := promptString "email" -}}
+{{- $signingkey := promptString "GPG signing key" -}}
+sourceVCS:
+  autoCommit: true
+data:
+  kubernetes: true
+  email: "{{ $email }}"
+  signingkey: "{{ $signingkey }}"

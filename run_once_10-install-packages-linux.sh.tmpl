@@ -1,4 +1,4 @@
-{{- if (eq .chezmoi.os "linux") -}}
+{{- if (eq .chezmoi.osRelease.id "ubuntu") -}}
 #!/bin/bash
 
 set -eufo pipefail
@@ -8,28 +8,15 @@ packages=()
 snaps=()
 classic_snaps=()
 
-
-
-
-{{ if (and (eq .chezmoi.osRelease.id "ubuntu") (eq .chezmoi.osRelease.versionCodename "groovy")) }}
-class_snaps+=(
-	go
-)
-{{ else if (not (eq .chezmoi.osRelease.id "raspbian")) }}
 repositories+=(
-	ppa:longsleep/golang-backports
+	ppa:deadsnakes/ppa
 )
-packages+=(
-	golang-go
-)
-{{ end }}
-
 
 packages+=(
 	make
 	curl
 	vim
-	ripgrep
+	bat
 	direnv
 	git-lfs
 	jq
@@ -37,9 +24,14 @@ packages+=(
 	vim-gtk
 	zsh
 	terminator
+	python-openssl
+	python3.7
+	htop
+	golang-go
 )
 
 classic_snaps+=(
+	ripgrep
 	code
 )
 
@@ -52,10 +44,8 @@ for repository in ${repositories[@]}; do
 done
 
 sudo apt update
-
 sudo apt install -y ${packages[@]}
 
-{{ if (eq .chezmoi.osRelease.id "ubuntu") }}
 for snap in ${snaps[@]}; do
 	sudo snap install $snap
 done
@@ -63,6 +53,10 @@ done
 for classic_snap in ${classic_snaps[@]}; do
 	sudo snap install $classic_snap --classic
 done
-{{ end }}
+
+
+# fix bat
+mkdir -p ~/.local/bin
+[ -L ~/.local/bin/bat ] || ln -s /usr/bin/batcat ~/.local/bin/bat
 
 {{ end }}

@@ -3,20 +3,25 @@ André Milton's dotfiles, managed with [`chezmoi.io`](https://chezmoi.io/).
 
 ## Install
 
-Install chezmoi
+# Ubuntu
+To install on Ubuntu 20.04:
 
+Install chezmoi
 ```
-curl -sfL https://git.io/chezmoi | sh
+snap install chezmoi --classic
 ```
 
 Stop auto-update if it's running and has a lock
-
 ```
 systemctl stop apt-daily.timer
 ```
 
-Generate an ssh key for this env.
+Install git
+```
+sudo apt-get install git
+```
 
+Generate an ssh key for this env.
 ```
 ssh-keygen
 ```
@@ -24,10 +29,8 @@ ssh-keygen
 Add key to github account.
 
 Initialize chezmoi and apply
-
 ```
-chezmoi init https://github.com/Wred/dotfiles.git
-chezmoi apply
+chezmoi init --apply --verbose git@github.com:Wred/dotfiles.git
 ```
 
 

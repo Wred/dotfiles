@@ -1,0 +1,7 @@
+{{ if (eq .chezmoi.os "linux") -}}
+#!/bin/bash
+
+[ -d ~/.pyenv ] || git clone https://github.com/pyenv/pyenv.git ~/.pyenv
+[ -d ~/.pyenv/plugins/pyenv-virtualenv ] || git clone https://github.com/pyenv/pyenv-virtualenv.git ~/.pyenv/plugins/pyenv-virtualenv
+
+{{ end -}}

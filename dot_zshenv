@@ -1,4 +1,7 @@
-PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
+
+# Set the default editor
+export VISUAL=$(which code)
 
 # Python env
 export PYENV_ROOT="$HOME/.pyenv"
@@ -12,4 +15,6 @@ go env -w GOPATH=$HOME/go
 export PATH="$PATH:$(go env GOPATH)/bin"
 
 # load secrets
-source .secrets
+if [ -f $HOME/.secrets ]; then
+    source $HOME/.secrets
+fi

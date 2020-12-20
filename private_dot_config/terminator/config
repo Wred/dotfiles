@@ -1,0 +1,43 @@
+[global_config]
+  window_state = fullscreen
+  borderless = True
+  title_transmit_fg_color = "#babdb6"
+  title_transmit_bg_color = "#000000"
+  title_inactive_fg_color = "#555753"
+  title_inactive_bg_color = "#000000"
+  inactive_color_offset = 1.0
+  title_use_system_font = False
+  title_font = Ubuntu Medium 10
+[keybindings]
+  line_up = <Shift>Up
+  line_down = <Shift>Down
+[profiles]
+  [[default]]
+    audible_bell = True
+    cursor_color = "#aaaaaa"
+    font = DroidSansMono Nerd Font 10
+    foreground_color = "#ffffff"
+    scrollback_lines = 50000
+    use_system_font = False
+    copy_on_selection = True
+    rewrap_on_resize = False
+[layouts]
+  [[default]]
+    [[[child0]]]
+      type = Window
+      parent = ""
+      order = 0
+      position = 0:0
+      maximised = False
+      fullscreen = True
+      size = 1440, 2560
+      title = /usr/bin/zsh
+      last_active_term = 77029a25-4e52-4622-8f0e-97c487b1447c
+      last_active_window = True
+    [[[terminal1]]]
+      type = Terminal
+      parent = child0
+      order = 0
+      profile = default
+      uuid = 77029a25-4e52-4622-8f0e-97c487b1447c
+[plugins]
