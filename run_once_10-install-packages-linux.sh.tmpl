@@ -1,4 +1,4 @@
-{{- if (eq .chezmoi.osRelease.id "ubuntu") -}}
+{{if (eq .chezmoi.osRelease.id "ubuntu") -}}
 #!/bin/bash
 
 set -eufo pipefail
@@ -58,5 +58,28 @@ done
 # fix bat
 mkdir -p ~/.local/bin
 [ -L ~/.local/bin/bat ] || ln -s /usr/bin/batcat ~/.local/bin/bat
+
+{{else if (eq .chezmoi.osRelease.id "ubuntu") -}}
+#!/bin/bash
+
+set -eufo pipefail
+
+repositories=()
+packages=()
+
+packages+=(
+	bat
+	direnv
+	git-lfs
+	jq
+	units
+	vim-gtk
+	terminator
+	python-openssl
+	golang-go
+)
+
+sudo pacman -S ${packages[@]}
+
 
 {{ end }}

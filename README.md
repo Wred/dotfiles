@@ -6,15 +6,20 @@ André Milton's dotfiles, managed with [`chezmoi.io`](https://chezmoi.io/).
 ## Ubuntu
 To install on Ubuntu 20.04:
 
-- Install chezmoi
-- Stop auto-update if it's running and has a lock
-- Install git
-- Initialize chezmoi and apply
-
 ```
 snap install chezmoi --classic
 systemctl stop apt-daily.timer
 sudo apt-get install git
+chezmoi init --apply --verbose git@github.com:Wred/dotfiles.git
+```
+
+*Note*: the stop for the apt service seems necessary to remove the lock likely taken by auto-update before installing git
+
+## Arch
+To install on Manjaro-i3 (https://manjaro.org/downloads/community/i3/):
+
+```
+pacman -S chezmoi
 chezmoi init --apply --verbose git@github.com:Wred/dotfiles.git
 ```
 
