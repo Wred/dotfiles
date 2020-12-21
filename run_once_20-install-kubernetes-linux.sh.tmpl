@@ -48,6 +48,17 @@ sudo apt-get install --yes \
 	google-cloud-sdk \
 	helm \
 	kubectl
+
+
+
+{{else if (eq .chezmoi.osRelease.id "manjaro") -}}
+sudo pacman -S --noconfirm \
+	containerd \
+	docker \
+	helm \
+	kubectl
+
+
 {{- end}}
 
 [ -d ~/.zsh/completion/ ] || mkdir -p ~/.zsh/completion/

@@ -59,15 +59,16 @@ done
 mkdir -p ~/.local/bin
 [ -L ~/.local/bin/bat ] || ln -s /usr/bin/batcat ~/.local/bin/bat
 
-{{else if (eq .chezmoi.osRelease.id "ubuntu") -}}
+
+
+
+{{else if (eq .chezmoi.osRelease.id "manjaro") -}}
 #!/bin/bash
 
 set -eufo pipefail
 
-repositories=()
-packages=()
-
-packages+=(
+packages=(
+	yay
 	bat
 	direnv
 	git-lfs
@@ -76,10 +77,18 @@ packages+=(
 	vim-gtk
 	terminator
 	python-openssl
-	golang-go
+	go
+	ripgrep
 )
 
+aur=(
+	visual-studio-code-bin
+)
+
+sudo pacman-mirrors --country Canada && sudo pacman -Syyu
 sudo pacman -S ${packages[@]}
 
+yay -Syu
+yay -S ${aur[@]}
 
 {{ end }}

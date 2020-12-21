@@ -7,6 +7,8 @@ set -eufo pipefail
 {{if (eq .chezmoi.osRelease.id "ubuntu") -}}
 gsettings set org.gnome.desktop.default-applications.terminal exec /usr/bin/terminator
 gsettings set org.gnome.desktop.default-applications.terminal exec-arg "-x"
+{{else if (eq .chezmoi.osRelease.id "manjaro") -}}
+sed -i 's/bindsym $mod+Return exec terminal/bindsym $mod+Return exec terminator/' ~/.i3/config
 {{- end}}
 
 # install powerlevel10k
@@ -19,6 +21,8 @@ curl -s -L https://github.com/romkatv/powerlevel10k/archive/${version}.tar.gz | 
 # install colorls
 {{if (eq .chezmoi.osRelease.id "ubuntu") -}}
 sudo apt install -y ruby-full
+{{else if (eq .chezmoi.osRelease.id "manjaro") -}}
+sudo pacman -S ruby
 {{- end}}
 sudo gem install colorls
 
