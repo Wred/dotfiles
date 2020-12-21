@@ -76,6 +76,6 @@ GO111MODULE="on" go get sigs.k8s.io/kind@v0.9.0
 kubectl completion zsh > ~/.zsh/completion/_kubectl
 
 # add shell completion for kind
-kind completion zsh  > ~/.zsh/completion/_kind
+$(go env GOPATH)/bin/kind completion zsh  > ~/.zsh/completion/_kind
 
 {{ end }}
