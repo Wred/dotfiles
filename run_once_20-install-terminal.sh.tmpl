@@ -24,7 +24,8 @@ sudo apt install -y ruby-full
 {{else if (eq .chezmoi.osRelease.id "manjaro") -}}
 sudo pacman -S --noconfirm ruby
 {{- end}}
-gem install colorls
+
+sudo gem install colorls
 
 # install syntax highlighting
 [ -d ~/.zsh/zsh-syntax-highlighting ] || git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.zsh/zsh-syntax-highlighting
@@ -37,10 +38,5 @@ if [ ! -d ~/.fzf ]; then
     git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
     ~/.fzf/install --completion --key-bindings --no-fish --no-bash --no-update-rc
 fi
-
-# chezmoi autocomplete
-[ -d ~/.zsh/completion/ ] || mkdir -p ~/.zsh/completion/
-
-chezmoi completion zsh > ~/.zsh/completion/_chezmoi
 
 {{ end -}}
