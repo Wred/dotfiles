@@ -70,23 +70,21 @@ set -eufo pipefail
 packages=(
 	yay
 	bat
-	direnv
 	git-lfs
 	jq
 	units
-	vim-gtk
 	terminator
-	python-openssl
 	go
 	ripgrep
 )
 
 aur=(
+	direnv
 	visual-studio-code-bin
 )
 
 sudo pacman-mirrors --country Canada && sudo pacman -Syyu
-sudo pacman -S ${packages[@]}
+sudo pacman -S --noconfirm ${packages[@]}
 
 yay -Syu
 yay -S ${aur[@]}

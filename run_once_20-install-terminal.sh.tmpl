@@ -22,7 +22,7 @@ curl -s -L https://github.com/romkatv/powerlevel10k/archive/${version}.tar.gz | 
 {{if (eq .chezmoi.osRelease.id "ubuntu") -}}
 sudo apt install -y ruby-full
 {{else if (eq .chezmoi.osRelease.id "manjaro") -}}
-sudo pacman -S ruby
+sudo pacman -S --noconfirm ruby
 {{- end}}
 sudo gem install colorls
 

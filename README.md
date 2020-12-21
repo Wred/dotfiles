@@ -19,7 +19,7 @@ chezmoi init --apply --verbose git@github.com:Wred/dotfiles.git
 To install on Manjaro-i3 (https://manjaro.org/downloads/community/i3/):
 
 ```
-pacman -S chezmoi
+pacman -S --noconfirm chezmoi
 chezmoi init --apply --verbose https://github.com/Wred/dotfiles.git
 ```
 
