@@ -91,3 +91,7 @@ yay -Syu
 yay -S ${aur[@]}
 
 {{ end }}
+
+
+# make sure we know where to find go binaries when installing
+export PATH="$PATH:$(go env GOPATH)/bin"
