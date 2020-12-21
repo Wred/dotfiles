@@ -1,0 +1,7 @@
+{{if (eq .chezmoi.osRelease.id "manjaro") -}}
+#!/bin/bash
+
+set -eufo pipefail
+
+sed -i 's/Pale Moon.desktop/google-chrome.desktop/' ~/.config/mimeapps.list
+{{ end }}
