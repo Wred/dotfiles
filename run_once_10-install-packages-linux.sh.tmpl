@@ -88,7 +88,7 @@ aur=(
 )
 
 sudo pacman-mirrors --country Canada && sudo pacman -Syyu
-sudo pacman -S --noconfirm ${packages[@]}
+sudo pacman -S --needed --noconfirm ${packages[@]}
 
 yay -Syu
 yay -S ${aur[@]}
