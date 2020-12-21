@@ -20,7 +20,7 @@ To install on Manjaro-i3 (https://manjaro.org/downloads/community/i3/):
 
 ```
 pacman -S chezmoi
-chezmoi init --apply --verbose git@github.com:Wred/dotfiles.git
+chezmoi init --apply --verbose https://github.com/Wred/dotfiles.git
 ```
 
 
