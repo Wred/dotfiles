@@ -14,9 +14,11 @@
 [profiles]
   [[default]]
     audible_bell = True
+    icon_bell = False
     cursor_color = "#aaaaaa"
     font = DroidSansMono Nerd Font 10
     foreground_color = "#ffffff"
+    show_titlebar = False
     scrollback_lines = 50000
     use_system_font = False
     copy_on_selection = True
