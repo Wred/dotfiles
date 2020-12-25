@@ -1,3 +1,4 @@
+{{- if (eq .chezmoi.os "linux") -}}
 {{if (eq .chezmoi.osRelease.id "ubuntu") -}}
 #!/bin/bash
 
@@ -8,9 +9,6 @@ packages=()
 snaps=()
 classic_snaps=()
 
-repositories+=(
-	ppa:deadsnakes/ppa
-)
 
 packages+=(
 	make
@@ -24,10 +22,13 @@ packages+=(
 	vim-gtk
 	zsh
 	terminator
-	python-openssl
-	python3.7
 	htop
 	golang-go
+)
+
+snaps+=(
+	spotify
+	signal-desktop
 )
 
 classic_snaps+=(
@@ -93,4 +94,5 @@ sudo pacman -S --needed --noconfirm ${packages[@]}
 yay -Syu
 yay -S --needed --noconfirm ${aur[@]}
 
+{{ end }}
 {{ end }}

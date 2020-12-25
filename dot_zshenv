@@ -10,11 +10,11 @@ eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
 export PATH="$HOME/.poetry/bin:$PATH"
 
-# Go stuff
-go env -w GOPATH=$HOME/go
-export PATH="$PATH:$(go env GOPATH)/bin"
-
 # load secrets
 if [ -f $HOME/.secrets ]; then
     source $HOME/.secrets
 fi
+
+# Ruby stuff (so that we don't need sudo to install gems)
+export GEM_HOME=$HOME/.gem
+export PATH="$PATH:$GEM_HOME/bin"

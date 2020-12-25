@@ -1,0 +1,28 @@
+{{- if (and (eq .chezmoi.os "darwin") .kubernetes) -}}
+#!/bin/bash
+
+set -efuo pipefail
+
+brew install \
+	azure-cli \
+	eksctl \
+	helm \
+	kubernetes-cli \
+	minikube
+
+[ -d ~/.zsh/completion/ ] || mkdir -p ~/.zsh/completion/
+
+# add shell completion for kubectl
+kubectl completion zsh > ~/.zsh/completion/_kubectl
+
+# install kind
+GO111MODULE="on" go get sigs.k8s.io/kind@v0.9.0
+
+# add shell completion for kind
+$(go env GOPATH)/bin/kind completion zsh  > ~/.zsh/completion/_kind
+
+# add shell completion for eksctl
+
+eksctl completion zsh > ~/.zsh/completion/_eksctl
+
+{{ end }}

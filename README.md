@@ -10,7 +10,7 @@ To install on Ubuntu 20.04:
 snap install chezmoi --classic
 systemctl stop apt-daily.timer
 sudo apt-get install git
-chezmoi init --apply --verbose git@github.com:Wred/dotfiles.git
+chezmoi init --apply --verbose https://github.com/Wred/dotfiles.git
 ```
 
 *Note*: the stop for the apt service seems necessary to remove the lock likely taken by auto-update before installing git
@@ -23,6 +23,16 @@ pacman -S --noconfirm chezmoi
 chezmoi init --apply --verbose https://github.com/Wred/dotfiles.git
 ```
 
+## Mac
+To install on MacOS 10.15 (Catalina)
+
+```
+brew install chezmoi
+chezmoi init --apply --verbose git@github.com:Wred/dotfiles.git
+```
+
+- Set iTerm2 as the default terminal (under the iTerm2 menu -> "Make iTerm2 Default Term").
+- "Note for iTerm2 users - Please enable the Nerd Font at iTerm2 > Preferences > Profiles > Text > Non-ASCII font > Hack Regular Nerd Font Complete."
 
 # GPG
 

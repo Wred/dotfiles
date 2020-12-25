@@ -11,7 +11,23 @@ autoload -U +X compinit bashcompinit
 compinit
 bashcompinit
 
+{{ if (eq .chezmoi.os "darwin") }}
+# not sure why this only applies to Mac
+export GPG_TTY=$(tty)
+{{ end }}
+
+# Go stuff
+go env -w GOPATH=$HOME/go
+export PATH="$PATH:$(go env GOPATH)/bin"
+
 alias cm='chezmoi'
+
+{{ if (eq .chezmoi.os "darwin") }}
+# ruby on Mac uses rbenv (to avoid using system ruby)
+export PATH="$HOME/.rbenv/bin:$PATH"
+export RUBY_CONFIGURE_OPTS="--with-openssl-dir=$(brew --prefix openssl@1.1)"
+eval "$(rbenv init -)"
+{{ end }}
 
 # colorls
 source $(dirname $(gem which colorls))/tab_complete.sh

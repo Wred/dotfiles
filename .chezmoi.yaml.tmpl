@@ -1,8 +1,13 @@
-{{- $email := promptString "email" -}}
-{{- $signingkey := promptString "GPG signing key" -}}
+{{- $personal := promptBool "Personal" -}}
+{{- $gitname := promptString "Git: Name" -}}
+{{- $gitemail := promptString "Git: Email" -}}
+{{- $gitsigningkey := promptString "Git: GPG signing key ID" -}}
+{{- $kubernetes := promptBool "Add Kubernetes" -}}
 sourceVCS:
   autoCommit: true
 data:
-  kubernetes: true
-  email: "{{ $email }}"
-  signingkey: "{{ $signingkey }}"
+  personal: {{ $personal }}
+  gitname: "{{ $gitname }}"
+  gitemail: "{{ $gitemail }}"
+  gitsigningkey: "{{ $gitsigningkey }}"
+  kubernetes: {{ $kubernetes }}

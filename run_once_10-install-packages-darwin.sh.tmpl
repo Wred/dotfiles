@@ -1,0 +1,46 @@
+{{- if (eq .chezmoi.os "darwin") -}}
+#!/bin/bash
+
+set -eufo pipefail
+
+formulae=(
+	curl
+	dockutil
+	git-lfs
+	gnu-units
+	gpg2
+	gnupg
+	pinentry-mac
+	go
+	jq
+	pkg-config
+	ripgrep
+	tmux
+	xz
+    python3
+	packer
+    bat
+	operator-sdk
+	direnv
+	watch
+)
+casks=(
+	docker
+	google-chrome
+	google-cloud-sdk
+	hammerspoon
+	iterm2
+	macvim
+	visual-studio-code
+	alt-tab
+	apptivate
+	signal
+)
+
+brew install ${formulae[@]}
+brew install --cask ${casks[@]}
+
+echo "pinentry-program /usr/local/bin/pinentry-mac" > ~/.gnupg/gpg-agent.conf
+echo "use-agent" > ~/.gnupg/gpg.conf
+
+{{ end }}

@@ -1,6 +1,20 @@
+{{ if (.personal) -}}
 [user]
-	email = {{ .email }}
-	name = Andre Milton
-	signingkey = {{ .signingkey }}
+	name = {{ .gitname }}
+	email = {{ .gitemail }}
+	signingkey = {{ .gitsigningkey }}
 [commit]
 	gpgsign = true
+[gpg]
+	program = gpg
+{{ else -}}
+[user]
+	name = {{ .gitname }}
+	email = {{ .gitemail }}
+[branch]
+	autosetuprebase = always
+[core]
+	autocrlf = input
+[credential]
+	helper = osxkeychain
+{{ end }}
