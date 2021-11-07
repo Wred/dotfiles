@@ -33,7 +33,7 @@ echo "deb [arch={{ .chezmoi.arch }}] https://packages.microsoft.com/repos/azure-
 echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
 echo "deb https://baltocdn.com/helm/stable/{{ .chezmoi.osRelease.idLike }}/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-{{ .chezmoi.osRelease.idLike }}.list
 echo "deb https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee /etc/apt/sources.list.d/google-cloud-sdk.list
-sudo add-apt-repository \
+sudo add-apt-repository --yes \
    "deb [arch={{ .chezmoi.arch }}] https://download.docker.com/linux/ubuntu \
    $(lsb_release -cs) \
    stable"
