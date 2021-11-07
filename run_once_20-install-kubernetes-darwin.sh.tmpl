@@ -9,7 +9,9 @@ brew install \
 	helm \
 	helmfile \
 	kubernetes-cli \
-	minikube
+	minikube \
+	kustomize \
+	k9s
 
 [ -d ~/.zsh/completion/ ] || mkdir -p ~/.zsh/completion/
 
@@ -25,5 +27,8 @@ $(go env GOPATH)/bin/kind completion zsh  > ~/.zsh/completion/_kind
 # add shell completion for eksctl
 
 eksctl completion zsh > ~/.zsh/completion/_eksctl
+
+# add helm diff (required for helmfile)
+helm plugin install https://github.com/databus23/helm-diff
 
 {{ end }}
