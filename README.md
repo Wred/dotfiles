@@ -68,3 +68,51 @@ gpg -K --keyid-format LONG
 
 *Note*: the ID is only listed in `LONG` format (after the slash)
 
+## Renewing keys
+
+GPG keys expire (set when you create them).  To renew, find the key and edit:
+
+```sh
+$ gpg --list-keys
+$ gpg --edit-key KEYID
+```
+
+Use the expire command to set a new expire date:
+
+```sh
+gpg> expire
+```    
+
+When prompted type `1y` or however long you want the key to last for.
+
+Select all the subkeys (the primary key, which we just set the expires date for, is key 0):
+
+```sh
+gpg> key 1
+gpg> key 2
+gpg> expire
+```
+
+A star will sppear before all selected keys.
+
+Since the key has changed we now need to trust it, otherwise we get the error "There is no assurance this key belongs to the named user" when using they key:
+
+```sh
+gpg> trust
+```
+
+When done, save:
+
+```sh
+gpg> save
+```
+
+
+## Test key
+
+Test it out, do a round trip:
+
+```sh
+gpg -ea > secret.out
+gpg -d secret.out
+```
