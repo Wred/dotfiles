@@ -10,6 +10,7 @@ brew install \
 	helmfile \
 	kubernetes-cli \
 	minikube \
+	kind \
 	kustomize \
 	k9s \
 	kubebuilder \
@@ -20,9 +21,6 @@ brew install \
 # add shell completion for kubectl
 kubectl completion zsh > ~/.zsh/completion/_kubectl
 
-# install kind
-GO111MODULE="on" go get sigs.k8s.io/kind@v0.9.0
-
 # add shell completion for kind
 $(go env GOPATH)/bin/kind completion zsh  > ~/.zsh/completion/_kind
 
@@ -31,6 +29,8 @@ $(go env GOPATH)/bin/kind completion zsh  > ~/.zsh/completion/_kind
 eksctl completion zsh > ~/.zsh/completion/_eksctl
 
 # add helm diff (required for helmfile)
+# need to remove it first before install (no skip if installed option)
+helm plugin uninstall diff
 helm plugin install https://github.com/databus23/helm-diff
 
 {{ end }}
