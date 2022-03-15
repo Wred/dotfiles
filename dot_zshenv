@@ -1,7 +1,7 @@
 export PATH="$HOME/.local/bin:$PATH"
 
 # Set the default editor
-export VISUAL=$(which code)
+export VISUAL=vi
 
 # Python env
 export PYENV_ROOT="$HOME/.pyenv"
