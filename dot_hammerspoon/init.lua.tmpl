@@ -1,0 +1,109 @@
+{{ if (eq .chezmoi.os "linux" "darwin") -}}
+local logger = require "hs.logger"
+local spaces = require "hs.spaces"
+-- local application = require "hs.application"
+-- local pathwatcher = require "hs.pathwatcher"
+local window = require "hs.window"
+local hotkey = require "hs.hotkey"
+local osascript = require "hs.osascript"
+
+hs.console.clearConsole()
+local log = logger.new('debug','debug')
+
+-- application.enableSpotlightForNameSearches(true)
+
+-- function dump(o)
+--    if type(o) == 'table' then
+--       local s = '{ '
+--       for k,v in pairs(o) do
+--          if type(k) ~= 'number' then k = '"'..k..'"' end
+--          s = s .. '['..k..'] = ' .. dump(v) .. ','
+--       end
+--       return s .. '} '
+--    else
+--       return tostring(o)
+--    end
+-- end
+
+-- function reloadConfig(files)
+--     doReload = false
+--     for _,file in pairs(files) do
+--         if file:sub(-4) == ".lua" then
+--             doReload = true
+--         end
+--     end
+--     if doReload then
+--         hs.reload()
+--     end
+-- end
+-- myWatcher = pathwatcher.new(os.getenv("HOME") .. "/.hammerspoon/", reloadConfig):start()
+-- log.i("Config loaded")
+
+
+function moveWindowToSpace(win, direction)
+    windowSpacesTable, err = spaces.windowSpaces(win)
+    if err then
+        log.e(err)
+    else
+        spacesTable, err = spaces.data_managedDisplaySpaces()
+        if err then
+            log.e(err)
+        else
+            for i,v in ipairs(spacesTable[1]["Spaces"]) do
+                if v["id64"] == windowSpacesTable[1] then
+                    -- found it!
+                    local newSpace
+                    if direction == "right" then
+                        if (i < #spacesTable[1]["Spaces"]) then
+                            newSpace = spacesTable[1]["Spaces"][i + 1]
+                            moved, err = spaces.moveWindowToSpace(win, newSpace["id64"])
+                            if err then
+                                log.e(err)
+                            end
+                            -- and change space
+                            local success, output, descriptor = osascript._osascript([[
+                                tell application "System Events"
+                                    key code 124 using {option down, command down}
+                                end tell
+                                do shell script "killall System\\ Events"
+                            ]], 'AppleScript')
+                            if not success then
+                                log.e(descriptor)
+                            end
+                        end
+                    elseif direction == "left" then
+                        if (i > 1) then
+                            newSpace = spacesTable[1]["Spaces"][i - 1]
+                            moved, err = spaces.moveWindowToSpace(win, newSpace["id64"])
+                            if err then
+                                log.e(err)
+                            end
+                            -- and change space
+                            local success, output, descriptor = osascript._osascript([[
+                                tell application "System Events"
+                                    key code 123 using {option down, command down}
+                                end tell
+                                do shell script "killall System\\ Events"
+                            ]], 'AppleScript')
+                            if not success then
+                                log.e(descriptor)
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
+
+
+hotkey.bind({"cmd", "alt", "ctrl"}, "right",
+    function()
+        moveWindowToSpace(window.focusedWindow(), "right")
+    end)
+hotkey.bind({"cmd", "alt", "ctrl"}, "left",
+    function()
+        moveWindowToSpace(window.focusedWindow(), "left")
+    end)
+
+{{ end -}}
