@@ -52,3 +52,8 @@ eval "$(pyenv virtualenv-init -)"
 
 source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+
+{{- if (.kubernetes) -}}
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+{{ end -}}

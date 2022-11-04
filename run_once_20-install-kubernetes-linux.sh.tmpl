@@ -48,8 +48,8 @@ sudo apt-get install --yes \
 	google-cloud-sdk \
 	helm \
 	helmfile \
-	kubectl
-
+	kubectl \
+	krew
 
 
 {{else if (eq .chezmoi.osRelease.id "manjaro") -}}
@@ -58,7 +58,8 @@ sudo pacman -S --noconfirm \
 	docker \
 	helm \
 	helmfile \
-	kubectl
+	kubectl \
+	krew
 
 
 {{- end}}
