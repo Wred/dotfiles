@@ -1,7 +1,7 @@
 export PATH="$HOME/.local/bin:$PATH"
 
 # Set the default editor
-export VISUAL=vi
+export VISUAL=vim
 
 # Python env
 export PYENV_ROOT="$HOME/.pyenv"
@@ -18,3 +18,5 @@ fi
 # Ruby stuff (so that we don't need sudo to install gems)
 export GEM_HOME=$HOME/.gem
 export PATH="$PATH:$GEM_HOME/bin"
+
+. "$HOME/.cargo/env"

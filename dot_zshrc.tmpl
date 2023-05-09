@@ -1,3 +1,8 @@
+if [ -z $TMUX ]; then
+    tmux
+    exit 1
+fi
+
 HISTFILE=~/.histfile
 HISTSIZE=100000
 SAVEHIST=100000
@@ -16,22 +21,16 @@ bashcompinit
 export GPG_TTY=$(tty)
 {{ end }}
 
+# neovim
+alias vim=nvim
+
 # Go stuff
 go env -w GOPATH=$HOME/go
 export PATH="$PATH:$(go env GOPATH)/bin"
 
 alias cm='chezmoi'
 
-{{ if (eq .chezmoi.os "darwin") }}
-# ruby on Mac uses rbenv (to avoid using system ruby)
-export PATH="$HOME/.rbenv/bin:$PATH"
-export RUBY_CONFIGURE_OPTS="--with-openssl-dir=$(brew --prefix openssl@1.1)"
-eval "$(rbenv init -)"
-{{ end }}
-
-# colorls
-source $(dirname $(gem which colorls))/tab_complete.sh
-alias ls='colorls --gs'
+alias ls='lsd --gs'
 alias ll='ls -1Al --sd'
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
@@ -53,7 +52,7 @@ eval "$(pyenv virtualenv-init -)"
 source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
-
-{{- if (.kubernetes) -}}
+{{- if (.kubernetes) }}
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 {{ end -}}
+

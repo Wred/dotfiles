@@ -14,34 +14,17 @@ gsettings set org.gnome.desktop.default-applications.terminal exec-arg "-x"
 sed -i 's/bindsym $mod+Return exec terminal/bindsym $mod+Return exec terminator/' ~/.i3/config
 {{- end}}
 
+# install tmux plugin manager
+if [ ! -d ~/.tmux/plugins/tpm ] ; then
+    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+fi
+
 # install powerlevel10k
 version="v1.14.3"
 destdir="${HOME}/powerlevel10k"
 rm -rf ${destdir}
 mkdir -p ${destdir}
 curl -s -L https://github.com/romkatv/powerlevel10k/archive/${version}.tar.gz | tar -C ${destdir} --strip-components=1 -xzf -
-
-# install colorls
-{{if (eq .chezmoi.os "darwin") -}}
-# need to do some juggling on my Mac at work for this...
-brew install -v rbenv ruby-build
-rbenv install -s -v 2.7.2
-rbenv global 2.7.2
-eval "$(rbenv init -)"
-
-export GEM_HOME=$HOME/.gem
-export PATH="$PATH:$GEM_HOME/bin"
-
-gem install colorls
-
-{{else}}
-{{if (eq .chezmoi.osRelease.id "ubuntu") -}}
-sudo apt install -y ruby-full
-{{else if (eq .chezmoi.osRelease.id "manjaro") -}}
-sudo pacman -S --noconfirm ruby
-{{- end}}
-sudo gem install --no-user-install colorls
-{{- end}}
 
 # install syntax highlighting
 [ -d ~/.zsh/zsh-syntax-highlighting ] || git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.zsh/zsh-syntax-highlighting
