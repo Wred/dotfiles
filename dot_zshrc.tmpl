@@ -30,8 +30,8 @@ export PATH="$PATH:$(go env GOPATH)/bin"
 
 alias cm='chezmoi'
 
-alias ls='lsd --gs'
-alias ll='ls -1Al --sd'
+alias ls='lsd --group-dirs=first'
+alias ll='ls -1Al'
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
