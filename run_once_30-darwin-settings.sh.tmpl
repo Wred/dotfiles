@@ -1,0 +1,7 @@
+{{- if (eq .chezmoi.os "darwin") -}}
+#!/bin/bash
+
+# change max mouse speed
+defaults write -g com.apple.mouse.scaling 5.0
+
+{{ end }}
