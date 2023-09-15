@@ -97,11 +97,11 @@ function moveWindowToSpace(win, direction)
 end
 
 
-hotkey.bind({"cmd", "alt", "ctrl"}, "right",
+hotkey.bind({"cmd", "alt", "shift"}, "right",
     function()
         moveWindowToSpace(window.focusedWindow(), "right")
     end)
-hotkey.bind({"cmd", "alt", "ctrl"}, "left",
+hotkey.bind({"cmd", "alt", "shift"}, "left",
     function()
         moveWindowToSpace(window.focusedWindow(), "left")
     end)
