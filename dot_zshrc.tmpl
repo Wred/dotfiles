@@ -33,6 +33,8 @@ alias cm='chezmoi'
 alias ls='lsd --group-dirs=first'
 alias ll='ls -1Al'
 
+alias dul='du -ch --max-depth=1 2>/dev/null | sort -h'
+
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 complete -o nospace -C /usr/local/bin/vault vault
