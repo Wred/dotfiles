@@ -1,0 +1,11 @@
+README.md
+
+{{ if ne .chezmoi.os "darwin" }}
+.config/karabiner
+.hammerspoon
+{{ end }}
+
+{{ if ne .chezmoi.os "linux" }}
+.config/terminator
+.xprofile
+{{ end }}
