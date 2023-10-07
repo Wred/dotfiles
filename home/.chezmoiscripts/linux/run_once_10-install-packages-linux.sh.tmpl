@@ -1,4 +1,3 @@
-{{- if (eq .chezmoi.os "linux") -}}
 {{if (eq .chezmoi.osRelease.id "ubuntu") -}}
 #!/bin/bash
 
@@ -102,5 +101,4 @@ sudo pacman -S --needed --noconfirm ${packages[@]}
 yay -Syu
 yay -S --needed --noconfirm ${aur[@]}
 
-{{ end }}
 {{ end }}
