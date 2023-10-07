@@ -16,7 +16,7 @@
     audible_bell = True
     icon_bell = False
     cursor_color = "#aaaaaa"
-    font = JetBrainsMono Nerd Font 14
+    font = JetBrainsMono Nerd Font 11
     foreground_color = "#ffffff"
     show_titlebar = False
     scrollback_lines = 50000
