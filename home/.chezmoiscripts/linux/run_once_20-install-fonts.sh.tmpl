@@ -1,4 +1,3 @@
-{{ if (eq .chezmoi.os "linux") -}}
 #!/bin/bash
 
 mkdir -p ~/.local/share/fonts
@@ -11,4 +10,3 @@ fc-cache -rv  # update font cache
 brew tap homebrew/cask-fonts
 brew install --cask font-hack-nerd-font
 
-{{ end -}}

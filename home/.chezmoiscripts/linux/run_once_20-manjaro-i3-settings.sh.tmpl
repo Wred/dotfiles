@@ -1,4 +1,3 @@
-{{- if (eq .chezmoi.os "linux") -}}
 {{if (eq .chezmoi.osRelease.id "manjaro") -}}
 #!/bin/bash
 
@@ -11,5 +10,4 @@ sed -i 's/palemoon/google-chrome-stable/' ~/.profile
 unset BROWSER
 xdg-settings set default-web-browser google-chrome.desktop
 
-{{ end }}
 {{ end }}
