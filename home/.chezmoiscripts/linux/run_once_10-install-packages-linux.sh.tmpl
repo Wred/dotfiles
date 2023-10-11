@@ -28,6 +28,7 @@ packages+=(
 	xclip
 	skanlite
   xcape
+  ripgrep
 )
 
 snaps+=(
@@ -37,7 +38,6 @@ snaps+=(
 )
 
 classic_snaps+=(
-	ripgrep
 	code
   nvim
 )
@@ -101,4 +101,5 @@ sudo pacman -S --needed --noconfirm ${packages[@]}
 yay -Syu
 yay -S --needed --noconfirm ${aur[@]}
 
+{{ end }}
 {{ end }}
