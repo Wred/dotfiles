@@ -116,3 +116,22 @@ Test it out, do a round trip:
 gpg -ea > secret.out
 gpg -d secret.out
 ```
+
+## Key mapping for Ubuntu
+
+Had a hell of a time finding a way to map escape and control to capslock and
+include it in this dotfiles repo.  So for now just do it manually from here:
+
+https://github.com/rvaiya/keyd
+
+Add a file `/etc/keyd/default.conf`:
+
+```
+[ids]
+
+*
+
+[main]
+
+capslock = overload(control, esc)
+```
