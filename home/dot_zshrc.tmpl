@@ -1,8 +1,3 @@
-if [ -z $TMUX ]; then
-    tmux
-    exit 1
-fi
-
 HISTFILE=~/.histfile
 HISTSIZE=100000
 SAVEHIST=100000
@@ -57,4 +52,6 @@ source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 {{- if (.kubernetes) }}
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 {{ end -}}
+
+bindkey -s ^f "tmux-sessionizer\n"
 

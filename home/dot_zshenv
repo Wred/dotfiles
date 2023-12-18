@@ -20,3 +20,6 @@ export GEM_HOME=$HOME/.gem
 export PATH="$PATH:$GEM_HOME/bin"
 
 . "$HOME/.cargo/env"
+
+# Add custom scripts dir
+export PATH="$HOME/.local/scripts:$PATH"
