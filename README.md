@@ -119,7 +119,7 @@ gpg -d secret.out
 
 ## Key mapping for Ubuntu
 
-Had a hell of a time finding a way to map escape and control to capslock and
+Had a hell of a time finding a way to map escape and control to capslock *on linux* and
 include it in this dotfiles repo.  So for now just do it manually from here:
 
 https://github.com/rvaiya/keyd

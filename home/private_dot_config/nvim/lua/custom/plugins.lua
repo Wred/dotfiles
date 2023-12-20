@@ -1,5 +1,5 @@
 local plugins = {
-  {
+ {
     "nvim-telescope/telescope.nvim",
     opts = {
       pickers = {
