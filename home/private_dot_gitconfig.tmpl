@@ -1,4 +1,3 @@
-{{ if (.personal) -}}
 [user]
 	name = {{ .gitname }}
 	email = {{ .gitemail }}
@@ -7,14 +6,31 @@
 	gpgsign = true
 [gpg]
 	program = gpg
-{{ else -}}
-[user]
-	name = {{ .gitname }}
-	email = {{ .gitemail }}
+{{ if not (.personal) -}}
 [branch]
 	autosetuprebase = always
-[core]
-	autocrlf = input
+{{ end }}
+{{ if (eq .chezmoi.os "darwin") -}}
 [credential]
 	helper = osxkeychain
 {{ end }}
+[diff]
+    tool = nvimdiff
+    guitool = nvimdiff
+[merge]
+    tool = nvimdiff
+    conflictstyle = diff3
+[mergetool]
+    keepBackup = false
+    trustExitCode = false
+    prompt = true
+[difftool]
+    prompt = false
+[commit]
+    gpgsign = true
+[core]
+    autocrlf = input
+    editor = nvim
+    pager = bat
+[mergetool "nvimdiff"]
+    layout = LOCAL,MERGED,REMOTE

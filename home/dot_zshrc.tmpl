@@ -17,6 +17,9 @@ export GPG_TTY=$(tty)
 {{ end }}
 
 # neovim
+# we'll stop ctrl-s from stopping the terminal so we can use it to save in vim
+# (and we may not need to stop the terminal)
+stty -ixon
 alias vim=nvim
 
 # Go stuff
@@ -48,10 +51,18 @@ eval "$(pyenv virtualenv-init -)"
 
 source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+bindkey -s ^f "tmux-sessionizer\n"
 
 {{- if (.kubernetes) }}
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 {{ end -}}
 
 bindkey -s ^f "tmux-sessionizer\n"
+
+source /usr/local/Homebrew/Library/Taps/now/homebrew-devtools/etc/zshrc
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
