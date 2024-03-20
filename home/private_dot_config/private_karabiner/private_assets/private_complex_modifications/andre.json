@@ -2,13 +2,15 @@
   "title": "André's customizations",
   "rules": [
     {
-      "description": "Left Ctrl is Left Command in iTerm2",
+      "description": "Terminal tweaks",
       "manipulators": [
         {
+          "type": "basic",
           "conditions": [
             {
               "bundle_identifiers": [
-                "^com\\.googlecode\\.iterm2$"
+                "^com\\.googlecode\\.iterm2$",
+                "^com\\.github\\.wez\\.wezterm$"
               ],
               "type": "frontmost_application_if"
             }
@@ -20,19 +22,14 @@
             {
               "key_code": "left_command"
             }
-          ],
-          "type": "basic"
-        }
-      ]
-    },
-    {
-      "description": "Left Command is Left Ctrl in iTerm2",
-      "manipulators": [
+          ]
+        },
         {
           "conditions": [
             {
               "bundle_identifiers": [
-                "^com\\.googlecode\\.iterm2$"
+                "^com\\.googlecode\\.iterm2$",
+                "^com\\.github\\.wez\\.wezterm$"
               ],
               "type": "frontmost_application_if"
             }
@@ -46,17 +43,13 @@
             }
           ],
           "type": "basic"
-        }
-      ]
-    },
-    {
-      "description": "Command+E Opens Finder except in iTerm2",
-      "manipulators": [
-        {
+       },
+       {
           "conditions": [
             {
               "bundle_identifiers": [
-                "^com\\.googlecode\\.iterm2$"
+                "^com\\.googlecode\\.iterm2$",
+                "^com\\.github\\.wez\\.wezterm$"
               ],
               "type": "frontmost_application_unless"
             }
@@ -75,18 +68,14 @@
             }
           ],
           "type": "basic"
-        }
-      ]
-    },
-    {
-      "description": "Command+E Opens Finder in iTerm2",
-      "manipulators": [
+        },
         {
           "conditions": [
             {
               "bundle_identifiers": [
-                "^com\\.googlecode\\.iterm2$"
-              ],
+                "^com\\.googlecode\\.iterm2$",
+                "^com\\.github\\.wez\\.wezterm$"
+               ],
               "type": "frontmost_application_if"
             }
           ],
@@ -94,7 +83,7 @@
             "key_code": "e",
             "modifiers": {
               "mandatory": [
-                "left_command"
+                "right_control"
               ]
             }
           },
@@ -104,17 +93,13 @@
             }
           ],
           "type": "basic"
-        }
-      ]
-    },
-    {
-      "description": "Alt + Ctrl + Left Arrow in Iterm2",
-      "manipulators": [
+        },
         {
           "conditions": [
             {
               "bundle_identifiers": [
-                "^com\\.googlecode\\.iterm2$"
+                "^com\\.googlecode\\.iterm2$",
+                "^com\\.github\\.wez\\.wezterm$"
               ],
               "type": "frontmost_application_if"
             }
@@ -138,17 +123,13 @@
             }
           ],
           "type": "basic"
-        }
-      ]
-    },
-    {
-      "description": "Alt + Ctrl + Right Arrow in Iterm2",
-      "manipulators": [
+        },
         {
           "conditions": [
             {
               "bundle_identifiers": [
-                "^com\\.googlecode\\.iterm2$"
+                "^com\\.googlecode\\.iterm2$",
+                "^com\\.github\\.wez\\.wezterm$"
               ],
               "type": "frontmost_application_if"
             }
@@ -172,17 +153,13 @@
             }
           ],
           "type": "basic"
-        }
-      ]
-    },
-    {
-      "description": "Ctrl + Space in iTerm2",
-      "manipulators": [
+        },
         {
           "conditions": [
             {
               "bundle_identifiers": [
-                "^com\\.googlecode\\.iterm2$"
+                "^com\\.googlecode\\.iterm2$",
+                "^com\\.github\\.wez\\.wezterm$"
               ],
               "type": "frontmost_application_if"
             }
@@ -208,52 +185,10 @@
       ]
     },
     {
-      "description": "Change caps_lock to control if pressed with other keys, to escape if pressed alone in iTerm2.",
+      "description": "Change caps_lock to control if pressed with other keys, to escape if pressed alone",
       "manipulators": [
-        {
+         {
           "type": "basic",
-          "conditions": [
-            {
-              "bundle_identifiers": [
-                "^com\\.googlecode\\.iterm2$"
-              ],
-              "type": "frontmost_application_if"
-            }
-          ],
-          "from": {
-            "key_code": "caps_lock",
-            "modifiers": {
-              "optional": [
-                "any"
-              ]
-            }
-          },
-          "to": [
-            {
-              "key_code": "left_control"
-            }
-          ],
-          "to_if_alone": [
-            {
-              "key_code": "escape"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "description": "Change caps_lock to control if pressed with other keys, to escape if pressed alone outside of iTerm2.",
-      "manipulators": [
-        {
-          "type": "basic",
-          "conditions": [
-            {
-              "bundle_identifiers": [
-                "^com\\.googlecode\\.iterm2$"
-              ],
-              "type": "frontmost_application_unless"
-            }
-          ],
           "from": {
             "key_code": "caps_lock",
             "modifiers": {

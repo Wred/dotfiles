@@ -32,19 +32,17 @@ formulae=(
 casks=(
 	docker
 	google-chrome
-	google-cloud-sdk
 	hammerspoon
-	iterm2
-	macvim
 	visual-studio-code
 	alt-tab
 	apptivate
 	audacity
+  wezterm
 )
 
 brew upgrade
 brew install ${formulae[@]}
-brew install --cask ${casks[@]}
+brew install --cask ${casks[@]} --no-quarantine
 
 echo "pinentry-program /usr/local/bin/pinentry-mac" > ~/.gnupg/gpg-agent.conf
 echo "use-agent" > ~/.gnupg/gpg.conf
