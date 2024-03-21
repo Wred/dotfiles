@@ -1,8 +1,3 @@
-if [ -z $TMUX ]; then
-    tmux
-    exit 1
-fi
-
 HISTFILE=~/.histfile
 HISTSIZE=100000
 SAVEHIST=100000
@@ -60,10 +55,13 @@ eval "$(pyenv virtualenv-init -)"
 source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
-bindkey -s ^f "tmux-sessionizer\n"
 
 {{- if (.kubernetes) }}
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
-{{ end -}}
+{{ end }}
 
+if [ -z $TMUX ]; then
+    tmux
+    exit 1
+fi
 
