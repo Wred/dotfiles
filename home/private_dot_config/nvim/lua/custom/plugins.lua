@@ -70,26 +70,44 @@ local plugins = {
       require "custom.configs.lspconfig"
     end,
   },
-	{
-		"jose-elias-alvarez/null-ls.nvim",
-		opts = function(_, opts)
-			local nls = require("null-ls").builtins
-			opts.sources = vim.list_extend(opts.sources or {}, {
-				nls.formatting.biome,
+  {
+    "jose-elias-alvarez/null-ls.nvim",
+    opts = function(_, opts)
+      local nls = require("null-ls").builtins
+      opts.sources = vim.list_extend(opts.sources or {}, {
+        nls.formatting.biome,
 
-				-- or if you like to live dangerously like me:
-				nls.formatting.biome.with({
-					args = {
-						'check',
-						'--apply-unsafe',
-						'--formatter-enabled=true',
-						'--organize-imports-enabled=true',
-						'--skip-errors',
-						'$FILENAME',
-					},
-				}),
-			})
-		end,
-	},
+        -- or if you like to live dangerously like me:
+        nls.formatting.biome.with({
+          args = {
+            'check',
+            '--apply-unsafe',
+            '--formatter-enabled=true',
+            '--organize-imports-enabled=true',
+            '--skip-errors',
+            '$FILENAME',
+          },
+        }),
+      })
+    end,
+  },
+  {
+    "nvim-treesitter/nvim-treesitter",
+    opts = function()
+      local options = require "plugins.configs.treesitter"
+      options.ensure_installed = {
+        "lua",
+        "vim",
+        "vimdoc",
+        "java",
+        "python",
+        "rust",
+        "go",
+        "json",
+        "make",
+      }
+      return options
+    end,
+  },
 }
 return plugins
