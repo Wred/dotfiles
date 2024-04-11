@@ -7,7 +7,9 @@ local config = wezterm.config_builder()
 
 config.use_ime = false
 config.font = wezterm.font 'JetBrainsMono Nerd Font'
+config.font_size = 16
 config.enable_tab_bar = false
+config.scrollback_lines = 10000
 
 wezterm.on('gui-startup', function(cmd)
   local tab, pane, window = mux.spawn_window(cmd or {})
