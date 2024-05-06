@@ -117,7 +117,9 @@ gpg -ea > secret.out
 gpg -d secret.out
 ```
 
-## Key mapping for Ubuntu
+## Key mapping
+
+### Ubuntu
 
 Had a hell of a time finding a way to map escape and control to capslock *on linux* and
 include it in this dotfiles repo.  So for now just do it manually from here:
@@ -135,3 +137,7 @@ Add a file `/etc/keyd/default.conf`:
 
 capslock = overload(control, esc)
 ```
+
+### Windows
+
+Use: https://github.com/ililim/dual-key-remap
