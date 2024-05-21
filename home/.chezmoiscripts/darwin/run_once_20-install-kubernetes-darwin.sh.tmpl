@@ -33,7 +33,7 @@ eksctl completion zsh > ~/.zsh/completion/_eksctl
 
 # add helm diff (required for helmfile)
 # need to remove it first before install (no skip if installed option)
-helm plugin uninstall diff
+helm plugin uninstall diff || true
 helm plugin install https://github.com/databus23/helm-diff
 
 {{ end }}
