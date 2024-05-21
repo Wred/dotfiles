@@ -43,7 +43,7 @@ casks=(
 
 brew upgrade
 brew install ${formulae[@]}
-brew reinstall --cask ${casks[@]} --no-quarantine
+brew install --cask ${casks[@]} --no-quarantine
 
 echo "pinentry-program /usr/local/bin/pinentry-mac" > ~/.gnupg/gpg-agent.conf
 echo "use-agent" > ~/.gnupg/gpg.conf
