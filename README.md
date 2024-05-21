@@ -1,6 +1,10 @@
 # dotfiles
 André Milton's dotfiles, managed with [`chezmoi.io`](https://chezmoi.io/).
 
+# Preflight
+
+You'll need to have an ssh key and gpg keys set up in Github.  The initialization will ask for the gpg key ID (see List Keys below).
+
 # Install
 
 ## Ubuntu
@@ -24,19 +28,35 @@ chezmoi init --apply --verbose https://github.com/Wred/dotfiles.git
 ```
 
 ## Mac
-To install on MacOS 10.15 (Catalina)
+To install on MacOS, install Homebrew:
+
+```
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+Follow the instructions to add `brew` to the path etc.
+
+Install `gpupg` with brew to generate a key (see below) and don't forget to generate an ssh key and add to Github.
+
+Install `chezmoi`:
 
 ```
 brew install chezmoi
 chezmoi init --apply --verbose git@github.com:Wred/dotfiles.git
 ```
 
-- Set iTerm2 as the default terminal (under the iTerm2 menu -> "Make iTerm2 Default Term").
-- "Note for iTerm2 users - Please enable the Nerd Font at iTerm2 > Preferences > Profiles > Text > Non-ASCII font > Hack Regular Nerd Font Complete."
-
 # GPG
 
 Using GPG for signing commits in git.
+
+## Create keys
+
+You can do this on a new machine:
+
+```
+gpg --full-generate-key
+```
+
 
 ## Backup keys
 
