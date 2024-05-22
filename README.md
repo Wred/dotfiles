@@ -10,7 +10,7 @@ You'll need to have an ssh key and gpg keys set up in Github.  The initializatio
 ## Ubuntu
 To install on Ubuntu 20.04:
 
-```
+```sh
 snap install chezmoi --classic
 systemctl stop apt-daily.timer
 sudo apt-get install git
@@ -22,7 +22,7 @@ chezmoi init --apply --verbose https://github.com/Wred/dotfiles.git
 ## Arch
 To install on Manjaro-i3 (https://manjaro.org/downloads/community/i3/):
 
-```
+```sh
 pacman -S --noconfirm chezmoi
 chezmoi init --apply --verbose https://github.com/Wred/dotfiles.git
 ```
@@ -30,7 +30,7 @@ chezmoi init --apply --verbose https://github.com/Wred/dotfiles.git
 ## Mac
 To install on MacOS, install Homebrew:
 
-```
+```sh
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
@@ -40,7 +40,7 @@ Install `gpupg` with brew to generate a key (see below) and don't forget to gene
 
 Install `chezmoi`:
 
-```
+```sh
 brew install chezmoi
 chezmoi init --apply --verbose git@github.com:Wred/dotfiles.git
 ```
@@ -53,7 +53,7 @@ Using GPG for signing commits in git.
 
 You can do this on a new machine:
 
-```
+```sh
 gpg --full-generate-key
 ```
 
@@ -87,6 +87,14 @@ gpg -K --keyid-format LONG
 ```
 
 *Note*: the ID is only listed in `LONG` format (after the slash)
+
+## Add keys to Github account
+
+To output the ASCII armor format to copy/paste into Github:
+
+```sh
+gpg --armor --export KEYID
+```
 
 ## Renewing keys
 
