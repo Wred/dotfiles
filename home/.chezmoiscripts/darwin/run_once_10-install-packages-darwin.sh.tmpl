@@ -2,10 +2,6 @@
 
 set -eufo pipefail
 
-taps=(
-  homebrew/cask-fonts
-)
-
 formulae=(
 	curl
 	dockutil
@@ -49,7 +45,6 @@ casks=(
 )
 
 brew upgrade
-brew tap ${taps[@]}
 brew install ${formulae[@]}
 brew install --cask ${casks[@]} --no-quarantine
 
