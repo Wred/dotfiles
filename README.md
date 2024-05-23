@@ -36,7 +36,12 @@ To install on MacOS, install Homebrew:
 
 Follow the instructions to add `brew` to the path etc.
 
-Install `gpupg` with brew to generate a key (see below) and don't forget to generate an ssh key and add to Github.
+Install `gpupg` with brew to generate a key (see below) and don't forget to generate an ssh key and add to Github.  You'll also need to fix the gpg config to point to gpg-agent to the correct pinentry (see https://stackoverflow.com/questions/39494631/gpg-failed-to-sign-the-data-fatal-failed-to-write-commit-object-git-2-10-0):
+
+```sh
+echo "pinentry-program $(brew --prefix)/bin/pinentry-mac" >> ~/.gnupg/gpg-agent.conf
+killall gpg-agent
+```
 
 Install `chezmoi`:
 
