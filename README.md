@@ -50,6 +50,11 @@ brew install chezmoi
 chezmoi init --apply --verbose git@github.com:Wred/dotfiles.git
 ```
 
+# Postflight
+
+Install the tmux packages using `prefix-I` to start the tpm install.
+Set the Neovim theme with `<leader> th`.
+
 # GPG
 
 Using GPG for signing commits in git.
