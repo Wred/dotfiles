@@ -19,13 +19,6 @@ if [ ! -d ~/.tmux/plugins/tpm ] ; then
     git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 fi
 
-# install powerlevel10k
-version="v1.14.3"
-destdir="${HOME}/powerlevel10k"
-rm -rf ${destdir}
-mkdir -p ${destdir}
-curl -s -L https://github.com/romkatv/powerlevel10k/archive/${version}.tar.gz | tar -C ${destdir} --strip-components=1 -xzf -
-
 # install syntax highlighting
 [ -d ~/.zsh/zsh-syntax-highlighting ] || git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.zsh/zsh-syntax-highlighting
 
