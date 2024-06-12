@@ -1,0 +1,4 @@
+[".local/share/fonts/NerdFonts"]
+	type = "archive"
+	url = "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.zip"
+	exact = true
