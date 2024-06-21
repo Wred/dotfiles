@@ -5,6 +5,10 @@
 {{- $kubernetes := promptBool "Add Kubernetes" -}}
 sourceVCS:
   autoCommit: true
+merge:
+  command: nvim
+  args:
+    - -d
 data:
   personal: {{ $personal }}
   gitname: "{{ $gitname }}"

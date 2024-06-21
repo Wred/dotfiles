@@ -9,11 +9,11 @@
 {{ if not (.personal) -}}
 [branch]
 	autosetuprebase = always
-{{ end }}
+{{- end }}
 {{ if (eq .chezmoi.os "darwin") -}}
 [credential]
 	helper = osxkeychain
-{{ end }}
+{{- end }}
 [diff]
     tool = nvimdiff
     guitool = nvimdiff
@@ -32,3 +32,5 @@
     pager = bat
 [mergetool "nvimdiff"]
     layout = LOCAL,MERGED,REMOTE
+[pull]
+	rebase = true
