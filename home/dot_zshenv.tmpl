@@ -21,8 +21,8 @@ export PATH="$PATH:$GEM_HOME/bin"
 
 . "$HOME/.cargo/env"
 
-# Add custom scripts dir
-export PATH="$HOME/.local/scripts:$PATH"
+# Add custom bin and scripts dir
+export PATH="$HOME/.local/bin:$HOME/.local/scripts:$PATH"
 
 {{/*
   Docker Desktop changed the socket file location to avoid admin
