@@ -7,7 +7,7 @@ local config = wezterm.config_builder()
 
 config.use_ime = false
 config.font = wezterm.font 'JetBrainsMono Nerd Font'
-config.font_size = 12
+config.font_size = 13
 config.enable_tab_bar = false
 config.scrollback_lines = 10000
 
