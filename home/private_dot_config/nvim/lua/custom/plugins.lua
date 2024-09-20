@@ -9,15 +9,6 @@ local plugins = {
     'neovim/nvim-lspconfig',
     'mfussenegger/nvim-dap',
     {
-      'williamboman/mason.nvim',
-      opts = {
-        registries = {
-          'github:nvim-java/mason-registry',
-          'github:mason-org/mason-registry',
-        },
-      },
-    },
-    {
       "williamboman/mason-lspconfig.nvim",
       opts = {
         handlers = {
@@ -61,7 +52,11 @@ local plugins = {
         "biome",
         "json-lsp",
       },
-    },
+      registries = {
+        'github:nvim-java/mason-registry',
+        'github:mason-org/mason-registry',
+      },
+     },
   },
   {
     "neovim/nvim-lspconfig",
@@ -107,6 +102,47 @@ local plugins = {
         "make",
       }
       return options
+    end,
+  },
+  {
+    "olexsmir/gopher.nvim",
+    ft = "go",
+    -- branch = "develop", -- if you want develop branch
+    -- keep in mind, it might break everything
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-treesitter/nvim-treesitter",
+      "mfussenegger/nvim-dap", -- (optional) only if you use `gopher.dap`
+    },
+    -- (optional) will update plugin's deps on every update
+    build = function()
+      vim.cmd.GoInstallDeps()
+    end,
+    ---@type gopher.Config
+    opts = {},
+  },
+  {
+    "nvim-pack/nvim-spectre",
+    lazy = false,
+    config = function()
+      require('spectre').setup({ is_block_ui_break = true })
+    end,
+  },
+  {
+      'kevinhwang91/nvim-hlslens',
+    config = function ()
+      require("hlslens").setup()
+    end,
+  },
+  {
+    "petertriho/nvim-scrollbar",
+    lazy = false,
+    dependencies = {
+      'lewis6991/gitsigns.nvim',
+      'kevinhwang91/nvim-hlslens',
+    },
+    config = function ()
+      require("scrollbar").setup()
     end,
   },
 }

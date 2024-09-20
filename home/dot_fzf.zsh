@@ -1,6 +1,6 @@
 # Setup fzf
 # ---------
-if [[ ! "$PATH" == */Users/andre.milton/.fzf/bin* ]]; then
+if [[ ! "$PATH" == *$HOME/.fzf/bin* ]]; then
 	PATH="${PATH:+${PATH}:}${HOME}/.fzf/bin"
 fi
 

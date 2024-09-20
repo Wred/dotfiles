@@ -3,7 +3,7 @@ HISTSIZE=100000
 SAVEHIST=100000
 bindkey -e
 
-zstyle :compinstall filename '/home/andre/.zshrc'
+zstyle :compinstall filename "$HOME/.zshrc"
 
 fpath=($fpath ~/.zsh/completion)
 
@@ -29,13 +29,21 @@ export PATH="$PATH:$(go env GOPATH)/bin"
 alias cm='chezmoi'
 
 alias ls='lsd --group-dirs=first'
-alias ll='ls -1Al'
+alias l='ls -1Al'
 
 alias dul='du -ch --max-depth=1 2>/dev/null | sort -h'
 
 alias k='kubectl'
 alias v='vim'
 alias lg='lazygit'
+alias d='docker'
+alias b='bat -p'
+alias m='make'
+
+# load local rc files (not from dotfiles)
+if [ -f $HOME/.zshrc.local ]; then
+    source $HOME/.zshrc.local
+fi
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
@@ -72,13 +80,26 @@ __conda_setup="$('/opt/homebrew/Caskroom/miniforge/base/bin/conda' 'shell.zsh' '
 if [ $? -eq 0 ]; then
     eval "$__conda_setup"
 else
-    if [ -f "/opt/homebrew/Caskroom/miniforge/base/etc/profile.d/conda.sh" ]; then
-        . "/opt/homebrew/Caskroom/miniforge/base/etc/profile.d/conda.sh"
+    if [ -f "$HOMEBREW_PREFIX/Caskroom/miniforge/base/etc/profile.d/conda.sh" ]; then
+        . "$HOMEBREW_PREFIX/Caskroom/miniforge/base/etc/profile.d/conda.sh"
     else
-        export PATH="/opt/homebrew/Caskroom/miniforge/base/bin:$PATH"
+        export PATH="$HOMEBREW_PREFIX/Caskroom/miniforge/base/bin:$PATH"
     fi
 fi
 unset __conda_setup
 # <<< conda initialize <<<
-{{ end }}
 
+# >>> mamba initialize >>>
+# !! Contents within this block are managed by 'mamba init' !!
+export MAMBA_EXE="$HOMEBREW_PREFIX/bin/micromamba";
+export MAMBA_ROOT_PREFIX="$HOME/micromamba";
+__mamba_setup="$("$MAMBA_EXE" shell hook --shell zsh --root-prefix "$MAMBA_ROOT_PREFIX" 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__mamba_setup"
+else
+    alias micromamba="$MAMBA_EXE"  # Fallback on help from mamba activate
+fi
+unset __mamba_setup
+# <<< mamba initialize <<<
+
+{{ end }}
