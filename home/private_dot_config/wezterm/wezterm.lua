@@ -11,6 +11,8 @@ config.font_size = 13
 config.enable_tab_bar = false
 config.scrollback_lines = 10000
 
+config.window_close_confirmation = 'NeverPrompt'
+
 wezterm.on('gui-startup', function(cmd)
   local tab, pane, window = mux.spawn_window(cmd or {})
   window:gui_window():toggle_fullscreen()

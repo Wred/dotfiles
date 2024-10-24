@@ -4,8 +4,7 @@
 [ -d ~/.pyenv ] || git clone https://github.com/pyenv/pyenv.git ~/.pyenv
 [ -d ~/.pyenv/plugins/pyenv-virtualenv ] || git clone https://github.com/pyenv/pyenv-virtualenv.git ~/.pyenv/plugins/pyenv-virtualenv
 
-# AM: TODO: Should use Homebrew here now
-#	pyenv
-#	pyenv-virtualenv
+# add pipx's path
+pipx ensurepath
 
 {{ end -}}
