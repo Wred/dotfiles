@@ -31,7 +31,7 @@ alias cm='chezmoi'
 alias ls='lsd --group-dirs=first'
 alias l='ls -1Al'
 
-alias dul='du -ch --max-depth=1 2>/dev/null | sort -h'
+alias dul='du -ch -d 1 2>/dev/null | sort -h'
 
 alias k='kubectl'
 alias v='vim'
@@ -40,6 +40,8 @@ alias d='docker'
 alias b='bat -p'
 alias m='make'
 alias g='git'
+alias p='python'
+alias k9s='k9s --headless'
 
 # load local rc files (not from dotfiles)
 if [ -f $HOME/.zshrc.local ]; then
@@ -89,14 +91,14 @@ unset __conda_setup
 # <<< conda initialize <<<
 
 # >>> mamba initialize >>>
-# !! Contents within this block are managed by 'mamba init' !!
-export MAMBA_EXE="$HOMEBREW_PREFIX/bin/micromamba";
-export MAMBA_ROOT_PREFIX="$HOME/micromamba";
+# !! Contents within this block are managed by 'mamba shell init' !!
+export MAMBA_EXE="$HOMEBREW_PREFIX/opt/micromamba/bin/mamba";
+export MAMBA_ROOT_PREFIX="$HOME/mamba";
 __mamba_setup="$("$MAMBA_EXE" shell hook --shell zsh --root-prefix "$MAMBA_ROOT_PREFIX" 2> /dev/null)"
 if [ $? -eq 0 ]; then
     eval "$__mamba_setup"
 else
-    alias micromamba="$MAMBA_EXE"  # Fallback on help from mamba activate
+    alias mamba="$MAMBA_EXE"  # Fallback on help from mamba activate
 fi
 unset __mamba_setup
 # <<< mamba initialize <<<

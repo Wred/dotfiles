@@ -1,22 +1,21 @@
-local config = require("plugins.configs.lspconfig")
-local config_on_attach = config.on_attach
-local capabilities = config.capabilities
-
-local lspconfig = require("lspconfig")
+-- load defaults i.e lua_lsp
+require("nvchad.configs.lspconfig").defaults()
+local nvlsp = require "nvchad.configs.lspconfig"
+local lspconfig = require "lspconfig"
 
 lspconfig.rust_analyzer.setup({
-  on_attach = config_on_attach,
-  capabilities = capabilities,
+  on_attach = nvlsp.on_attach,
+  capabilities = nvlsp.capabilities,
   filetypes = {"rust"},
   root_dir = lspconfig.util.root_pattern("Cargo.toml")
 })
 
-lspconfig.tsserver.setup({
+lspconfig.ts_ls.setup({
   on_attach = function (client)
     client.server_capabilities.documentFormattingProvider = false
-    return config_on_attach(client)
+    return nvlsp.config_on_attach(client)
   end,
-  capabilities = capabilities,
+  capabilities = nvlsp.capabilities,
   init_options = {
     preferences = {
       disableSuggestions = true,
@@ -25,8 +24,8 @@ lspconfig.tsserver.setup({
 })
 
 lspconfig.gopls.setup ({
-  on_attach = config_on_attach,
-  capabilities = capabilities,
+  on_attach = nvlsp.on_attach,
+  capabilities = nvlsp.capabilities,
   cmd = {"gopls"},
   filetypes = { "go", "gomod", "gowork", "gotmpl" },
   root_dir = lspconfig.util.root_pattern("go.work", "go.mod", ".git"),
@@ -51,3 +50,4 @@ lspconfig.golangci_lint_ls.setup ({
 })
 
 lspconfig.biome.setup({})
+

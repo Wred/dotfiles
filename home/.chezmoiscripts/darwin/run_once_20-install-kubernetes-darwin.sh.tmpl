@@ -36,4 +36,9 @@ eksctl completion zsh > ~/.zsh/completion/_eksctl
 helm plugin uninstall diff || true
 helm plugin install https://github.com/databus23/helm-diff
 
+# need oidc login
+kubectl krew install oidc-login
+kubectl krew install ctx
+kubectl krew install ns
+
 {{ end }}

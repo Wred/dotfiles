@@ -34,6 +34,8 @@ formulae=(
   htop
   golangci-lint
   dive
+  sad
+  zed
 )
 casks=(
 	docker
@@ -53,5 +55,5 @@ brew upgrade
 brew install ${formulae[@]}
 brew install --cask ${casks[@]} --no-quarantine
 
-echo "pinentry-program /usr/local/bin/pinentry-mac" > ~/.gnupg/gpg-agent.conf
+echo "pinentry-program $(brew --prefix)/bin/pinentry-mac" > ~/.gnupg/gpg-agent.conf
 echo "use-agent" > ~/.gnupg/gpg.conf
