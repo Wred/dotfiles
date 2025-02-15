@@ -191,7 +191,7 @@ return {
   {
     "nvim-treesitter/nvim-treesitter",
     opts = function()
-      local options = require "plugins.configs.treesitter"
+      local options = require "nvchad.configs.treesitter"
       options.ensure_installed = {
         "lua",
         "vim",
