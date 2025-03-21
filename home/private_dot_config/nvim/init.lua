@@ -40,6 +40,12 @@ end)
 
 -- Andre customizations
 vim.opt.colorcolumn = "80"
+vim.opt.autoindent = true
+vim.opt.expandtab = false
+vim.opt.tabstop = 4
+vim.opt.shiftwidth = 0
+vim.opt.softtabstop = 0
+vim.opt.linebreak = true
 
 vim.keymap.set({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save file" })
 vim.keymap.set({ "i", "x", "n", "s" }, "<C-q>", "<cmd>qa<cr>", { desc = "Quit" })

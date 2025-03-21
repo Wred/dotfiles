@@ -15,22 +15,27 @@
 	helper = osxkeychain
 {{- end }}
 [diff]
-    tool = nvimdiff
-    guitool = nvimdiff
+	tool = nvimdiff
+	guitool = nvimdiff
 [merge]
-    tool = nvimdiff
-    conflictstyle = diff3
+	tool = nvimdiff
+	conflictstyle = diff3
 [mergetool]
-    keepBackup = false
-    trustExitCode = false
-    prompt = true
+	keepBackup = false
+	trustExitCode = false
+	prompt = true
 [difftool]
-    prompt = false
+	prompt = false
 [core]
-    autocrlf = input
-    editor = nvim
-    pager = bat -p
+	autocrlf = input
+	editor = nvim
+	pager = bat -p
 [mergetool "nvimdiff"]
-    layout = LOCAL,MERGED,REMOTE
+	layout = LOCAL,MERGED,REMOTE
 [pull]
 	rebase = true
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
