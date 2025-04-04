@@ -3,6 +3,25 @@ HISTSIZE=100000
 SAVEHIST=100000
 bindkey -e
 
+# use vi-style keyboard binding for editing commands
+set -o vi
+
+# Bind command list:
+# https://zsh.sourceforge.io/Doc/Release/Zsh-Line-Editor.html#Standard-Widgets
+
+# Bind keys in vi command mode
+bindkey -M vicmd '.' insert-last-word
+
+# Bind keys in vi insert mode
+bindkey -M viins '^L' clear-screen
+bindkey -M viins '^A' beginning-of-line
+bindkey -M viins '^E' end-of-line
+bindkey -M viins '^W' backward-kill-word
+bindkey -M viins '^K' kill-line
+bindkey -M viins '^P' up-history
+bindkey -M viins '^N' down-history
+bindkey -M viins '^U' kill-whole-line
+
 zstyle :compinstall filename "$HOME/.zshrc"
 
 fpath=($fpath ~/.zsh/completion)

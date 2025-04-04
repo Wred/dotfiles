@@ -54,29 +54,6 @@ return {
 	},
 
 	{
-		'nvim-java/nvim-java',
-		dependencies = {
-			'nvim-java/lua-async-await',
-			'nvim-java/nvim-java-core',
-			'nvim-java/nvim-java-test',
-			'nvim-java/nvim-java-dap',
-			'MunifTanjim/nui.nvim',
-			'neovim/nvim-lspconfig',
-			'mfussenegger/nvim-dap',
-			{
-				"williamboman/mason-lspconfig.nvim",
-				opts = {
-					handlers = {
-						["jdtls"] = function()
-							require("java").setup()
-						end,
-					},
-				},
-			},
-		},
-	},
-
-	{
 		"folke/snacks.nvim",
 		priority = 1000,
 		lazy = false,
@@ -177,11 +154,13 @@ return {
 			ensure_installed = {
 				"lua-language-server",
 				"gopls",
+				"golangci-lint-langserver",
 				"rust-analyzer",
-				"python-lsp-server",
 				"typescript-language-server",
-				"biome",
-				"json-lsp",
+				"ruff",
+				"pyright",
+				"jsonls",
+				"yamlls",
 			},
 			registries = {
 				'github:nvim-java/mason-registry',
@@ -198,25 +177,7 @@ return {
 	},
 
 	{
-		"jose-elias-alvarez/null-ls.nvim",
-		opts = function(_, opts)
-			local nls = require("null-ls").builtins
-			opts.sources = vim.list_extend(opts.sources or {}, {
-				nls.formatting.biome,
-
-				-- or if you like to live dangerously like me:
-				nls.formatting.biome.with({
-					args = {
-						'check',
-						'--apply-unsafe',
-						'--formatter-enabled=true',
-						'--organize-imports-enabled=true',
-						'--skip-errors',
-						'$FILENAME',
-					},
-				}),
-			})
-		end,
+		"b0o/schemastore.nvim",
 	},
 
 	{
@@ -248,12 +209,31 @@ return {
 			"nvim-treesitter/nvim-treesitter",
 			"mfussenegger/nvim-dap", -- (optional) only if you use `gopher.dap`
 		},
-		-- (optional) will update plugin's deps on every update
-		build = function()
-			vim.cmd.GoInstallDeps()
-		end,
 		---@type gopher.Config
 		opts = {},
+	},
+
+	{
+		'nvim-java/nvim-java',
+		dependencies = {
+			'nvim-java/lua-async-await',
+			'nvim-java/nvim-java-core',
+			'nvim-java/nvim-java-test',
+			'nvim-java/nvim-java-dap',
+			'MunifTanjim/nui.nvim',
+			'neovim/nvim-lspconfig',
+			'mfussenegger/nvim-dap',
+			{
+				"williamboman/mason-lspconfig.nvim",
+				opts = {
+					handlers = {
+						["jdtls"] = function()
+							require("java").setup()
+						end,
+					},
+				},
+			},
+		},
 	},
 
 	{
