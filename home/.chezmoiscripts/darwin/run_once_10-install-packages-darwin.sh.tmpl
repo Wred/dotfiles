@@ -36,6 +36,7 @@ formulae=(
 	dive
 	sad
 	nvm
+	pulumi
 )
 
 casks=(
@@ -52,11 +53,12 @@ casks=(
 	font-jetbrains-mono-nerd-font
 	## nikitabobko/tap/aerospace
 	zed
+	beekeeper-studio
 )
 
 brew upgrade
 brew install ${formulae[@]}
-brew install --cask ${casks[@]} --no-quarantine
+brew install --force --cask ${casks[@]} --no-quarantine
 
 echo "pinentry-program $(brew --prefix)/bin/pinentry-mac" > ~/.gnupg/gpg-agent.conf
 echo "use-agent" > ~/.gnupg/gpg.conf

@@ -131,3 +131,13 @@ lspconfig.yamlls.setup({
 	},
 })
 
+lspconfig.prismals.setup({
+    cmd = { 'prisma-language-server', '--stdio' },
+    filetypes = { 'prisma' },
+    settings = {
+      prisma = {
+        prismaFmtBinPath = '',
+      },
+    },
+    root_dir = lspconfig.util.root_pattern('.git', 'package.json'),
+  })
