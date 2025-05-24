@@ -14,7 +14,7 @@ To install on Ubuntu 20.04:
 snap install chezmoi --classic
 systemctl stop apt-daily.timer
 sudo apt-get install git
-chezmoi init --apply --verbose https://github.com/Wred/dotfiles.git
+chezmoi init --apply --verbose git@github.com:Wred/dotfiles.git
 ```
 
 *Note*: the stop for the apt service seems necessary to remove the lock likely taken by auto-update before installing git
