@@ -144,7 +144,7 @@ return {
 		opts = {
 			pickers = {
 				find_files = {
-					hidden = true
+					hidden = true,
 				},
                 live_grep = {
                     file_ignore_patterns = { 'node_modules', '.git', '.venv' },

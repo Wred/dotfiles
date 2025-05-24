@@ -1,0 +1,18 @@
+{{ if (eq .chezmoi.os "linux" "darwin") -}}
+#!/usr/bin/env zsh
+set -eufo pipefail
+
+# VSCode LSPs for HTML/CSS/JSON/ESLint
+sudo sudo npm i -g vscode-langservers-extracted
+
+{{ if (eq .chezmoi.os "darwin") -}}
+brew install yaml-language-server
+brew install python-lsp-server
+{{ else }}
+sudo snap install yaml-language-server
+sudo apt-get install python3-pylsp
+{{ end -}}
+
+sudo npm install -g @prisma/language-server
+
+{{ end -}}

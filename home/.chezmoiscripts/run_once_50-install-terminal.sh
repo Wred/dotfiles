@@ -1,18 +1,5 @@
-{{ if (eq .chezmoi.os "darwin" "linux") -}}
-#!/bin/bash
-
+#!/usr/bin/env zsh
 set -eufo pipefail
-
-{{if (eq .chezmoi.os "darwin") -}}
-# TODO: find a way to set default terminal to iTerm2 via cli?
-{{else if (eq .chezmoi.osRelease.id "ubuntu") -}}
-# set default terminal to terminator
-gsettings set org.gnome.desktop.default-applications.terminal exec /usr/bin/terminator
-gsettings set org.gnome.desktop.default-applications.terminal exec-arg "-x"
-{{else if (eq .chezmoi.osRelease.id "manjaro") -}}
-# set default terminal to terminator
-sed -i 's/bindsym $mod+Return exec terminal/bindsym $mod+Return exec terminator/' ~/.i3/config
-{{- end}}
 
 # install tmux plugin manager
 if [ ! -d ~/.tmux/plugins/tpm ] ; then
@@ -31,4 +18,3 @@ if [ ! -d ~/.fzf ]; then
     ~/.fzf/install --completion --key-bindings --no-fish --no-bash --no-update-rc
 fi
 
-{{ end -}}

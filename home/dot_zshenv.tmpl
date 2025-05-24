@@ -31,4 +31,6 @@ export DOCKER_HOST=unix://$HOME/.docker/run/docker.sock
 {{ end }}
 
 # Use all configs in Kubernetes the folder
-export KUBECONFIG=$(ls ~/.kube/*config | paste -sd ":" -)
+if [ -d "${HOME}/.kube" ]; then
+	export KUBECONFIG=$(ls ~/.kube/*config | paste -sd ":" -)
+fi

@@ -1,0 +1,97 @@
+{{- if .kubernetes -}}
+#!/usr/bin/env zsh
+set -efuo pipefail
+
+{{if (eq .chezmoi.osRelease.id "ubuntu") -}}
+# install azure-cli, docker, google-cloud-sdk, helm, and kubectl
+# https://docs.docker.com/engine/install/ubuntu/
+# https://docs.microsoft.com/en-us/cli/azure/install-azure-cli-apt
+# https://cloud.google.com/sdk/docs/install
+# https://kubernetes.io/docs/tasks/tools/install-kubectl/
+# https://helm.sh/docs/intro/install/
+
+# install prerequisite packages
+sudo apt-get install --yes \
+	apt-transport-https \
+	ca-certificates \
+	curl \
+	gnupg \
+	gnupg2 \
+	gnupg-agent \
+	lsb-release \
+	software-properties-common
+
+# add keys and sources
+
+# Kubernetes
+curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.33/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+sudo chmod 644 /etc/apt/keyrings/kubernetes-apt-keyring.gpg # allow unprivileged APT programs to read this keyring
+echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.33/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
+sudo chmod 644 /etc/apt/sources.list.d/kubernetes.list   # helps tools such as command-not-found to work correctly
+
+# Helm
+curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg > /dev/null
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
+
+# Docker
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+
+
+# install packages
+sudo apt-get update
+sudo apt-get install --yes \
+	containerd.io \
+	docker-ce \
+	docker-ce-cli \
+	docker-buildx-plugin \
+	docker-compose-plugin \
+	helm \
+	kubectl
+
+(
+  set -x; cd "$(mktemp -d)" &&
+  OS="$(uname | tr '[:upper:]' '[:lower:]')" &&
+  ARCH="$(uname -m | sed -e 's/x86_64/amd64/' -e 's/\(arm\)\(64\)\?.*/\1\2/' -e 's/aarch64$/arm64/')" &&
+  KREW="krew-${OS}_${ARCH}" &&
+  curl -fsSLO "https://github.com/kubernetes-sigs/krew/releases/latest/download/${KREW}.tar.gz" &&
+  tar zxvf "${KREW}.tar.gz" &&
+  ./"${KREW}" install krew
+)
+
+
+{{else if (eq .chezmoi.osRelease.id "manjaro") -}}
+sudo pacman -S --noconfirm \
+	containerd \
+	docker \
+	helm \
+	helmfile \
+	kubectl \
+	krew
+
+
+{{- end}}
+
+[ -d ~/.zsh/completion/ ] || mkdir -p ~/.zsh/completion/
+
+# install eksctl
+# https://eksctl.io/introduction/#installation
+curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_{{ .chezmoi.os }}_{{ .chezmoi.arch }}.tar.gz" | tar xz -C /tmp
+sudo mv /tmp/eksctl /usr/local/bin
+eksctl completion zsh > ~/.zsh/completion/_eksctl
+
+# install kind
+go install sigs.k8s.io/kind@v0.29.0
+
+# add shell completion for kubectl
+kubectl completion zsh > ~/.zsh/completion/_kubectl
+
+# add shell completion for kind
+$(go env GOPATH)/bin/kind completion zsh  > ~/.zsh/completion/_kind
+
+{{ end }}

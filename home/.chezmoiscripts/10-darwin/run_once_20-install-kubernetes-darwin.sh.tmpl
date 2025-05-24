@@ -1,7 +1,6 @@
 {{- if .kubernetes -}}
-#!/bin/bash
-
-set -efuo pipefail
+#!/usr/bin/env zsh
+set -eufo pipefail
 
 brew install \
 	azure-cli \

@@ -1,6 +1,4 @@
-{{if (eq .chezmoi.osRelease.id "ubuntu") -}}
-#!/bin/bash
-
+#!/usr/bin/env zsh
 set -eufo pipefail
 
 sudo add-apt-repository --yes ppa:deadsnakes/ppa
@@ -16,5 +14,3 @@ curl -sSL https://install.python-poetry.org | python3 -
 #   N: See apt-secure(8) manpage for repository creation and user configuration details.
 
 sudo add-apt-repository --yes --remove ppa:deadsnakes/ppa
-
-{{ end }}

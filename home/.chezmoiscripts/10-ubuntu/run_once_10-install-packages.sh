@@ -1,6 +1,4 @@
-{{if (eq .chezmoi.osRelease.id "ubuntu") -}}
-#!/bin/bash
-
+#!/usr/bin/env zsh
 set -eufo pipefail
 
 repositories=()
@@ -19,7 +17,6 @@ packages+=(
 	jq
 	units
 	zsh
-	wezterm
 	htop
 	golang-go
 	krita
@@ -27,8 +24,16 @@ packages+=(
 	tmux
 	xclip
 	skanlite
-  xcape
-  fd-find
+	xcape
+	fd-find
+	nodejs
+	npm
+	pipx
+	luarocks
+	wl-clipboard
+	imagemagick
+	ripgrep
+	fd-find
 )
 
 snaps+=(
@@ -38,9 +43,8 @@ snaps+=(
 )
 
 classic_snaps+=(
-	ripgrep
 	code
-  nvim
+	nvim
 )
 
 
@@ -67,40 +71,4 @@ done
 # fix bat
 mkdir -p ~/.local/bin
 [ -L ~/.local/bin/bat ] || ln -s /usr/bin/batcat ~/.local/bin/bat
-
-
-
-
-{{else if (eq .chezmoi.osRelease.id "manjaro") -}}
-#!/bin/bash
-
-set -eufo pipefail
-
-packages=(
-	gcc
-	yay
-	bat
-	git-lfs
-	jq
-	units
-	terminator
-	go
-	ripgrep
-)
-
-aur=(
-	direnv
-	visual-studio-code-bin
-	spotify
-	google-chrome
-	slack
-)
-
-sudo pacman-mirrors --country Canada && sudo pacman -Syyu
-sudo pacman -S --needed --noconfirm ${packages[@]}
-
-yay -Syu
-yay -S --needed --noconfirm ${aur[@]}
-
-{{ end }}
 

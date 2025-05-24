@@ -1,13 +1,22 @@
-README.md
-
-{{ if ne .chezmoi.os "darwin" }}
-.chezmoiscripts/darwin/**
+{{ if ne .chezmoi.os "darwin" -}}
+{{ if (eq .chezmoi.osRelease.id "ubuntu") -}}
+# Ubuntu
+.chezmoiscripts/10-darwin/**
+.chezmoiscripts/10-arch/**
 .config/karabiner
 .hammerspoon
+{{ else if (eq .chezmoi.osRelease.id "manjaro") -}}
+# Arch
+.chezmoiscripts/10-darwin/**
+.chezmoiscripts/10-ubuntu/**
+.config/karabiner
+.hammerspoon
+{{ end -}}
 {{ end }}
-
-{{ if ne .chezmoi.os "linux" }}
-.chezmoiscripts/linux/**
+{{ if ne .chezmoi.os "linux" -}}
+# MacOS
+.chezmoiscripts/10-ubuntu/**
+.chezmoiscripts/10-arch/**
 .config/terminator
 .chezmoiexternals/linux.nerdfont.toml
-{{ end }}
+{{- end }}
