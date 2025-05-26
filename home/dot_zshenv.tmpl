@@ -30,7 +30,7 @@ export PATH="$HOME/.local/bin:$HOME/.local/scripts:$PATH"
 export DOCKER_HOST=unix://$HOME/.docker/run/docker.sock
 {{ end }}
 
-# Use all configs in Kubernetes the folder
+# Use all configs in Kubernetes config folder
 if [ -d "${HOME}/.kube" ]; then
 	export KUBECONFIG=$(ls ~/.kube/*config | paste -sd ":" -)
 fi
