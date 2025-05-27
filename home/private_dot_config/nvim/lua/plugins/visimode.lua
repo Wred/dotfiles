@@ -1,0 +1,5 @@
+return {
+	{
+		"wred/visimode.nvim",
+	}
+}
