@@ -1,3 +1,15 @@
+# check if parent is foot, then start 
+tmux_run() {
+	parent_process=$(ps -p $PPID -o comm=)
+
+	if [[ "$parent_process" != "windsurf" ]]; then
+		if [ -z "$TMUX" ]; then
+			tmux
+		fi
+	fi
+}
+tmux_run
+
 HISTFILE=~/.histfile
 HISTSIZE=100000
 SAVEHIST=100000
@@ -46,6 +58,7 @@ go env -w GOPATH=$HOME/go
 export PATH="$PATH:$(go env GOPATH)/bin"
 
 alias cm='chezmoi'
+alias ca='chezmoi apply'
 
 alias ls='lsd --group-dirs=first'
 alias l='ls -1Al'
@@ -61,6 +74,16 @@ alias m='make'
 alias g='git'
 alias p='python'
 alias k9s='k9s --headless'
+
+# yazi shell wrapper as suggested here:
+#   https://yazi-rs.github.io/docs/quick-start
+function y() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+	yazi "$@" --cwd-file="$tmp"
+	IFS= read -r -d '' cwd < "$tmp"
+	[ -n "$cwd" ] && [ "$cwd" != "$PWD" ] && builtin cd -- "$cwd"
+	rm -f -- "$tmp"
+}
 
 # load local rc files (not from dotfiles)
 if [ -f $HOME/.zshrc.local ]; then
@@ -87,11 +110,6 @@ source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 {{- if (.kubernetes) }}
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 {{ end -}}
-
-if [ -z $TMUX ]; then
-    tmux
-    exit 1
-fi
 
 {{ if (eq .chezmoi.os "darwin") -}}
 # >>> conda initialize >>>
@@ -128,4 +146,5 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$HOMEBREW_PREFIX/opt/nvm/nvm.sh" ] && \. "$HOMEBREW_PREFIX/opt/nvm/nvm.sh"  # This loads nvm
 [ -s "$HOMEBREW_PREFIX/opt/nvm/etc/bash_completion.d/nvm" ] && \. "$HOMEBREW_PREFIX/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
 
-
+# Added by Windsurf
+export PATH="/Users/andre.milton/.codeium/windsurf/bin:$PATH"

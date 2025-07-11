@@ -37,6 +37,14 @@ formulae=(
 	sad
 	nvm
 	pulumi
+	yazi
+	ffmpeg
+	sevenzip
+	poppler
+	zoxide
+	resvg
+	imagemagick
+	hugo
 )
 
 casks=(
@@ -60,5 +68,3 @@ brew upgrade
 brew install ${formulae[@]}
 brew install --force --cask ${casks[@]} --no-quarantine
 
-echo "pinentry-program $(brew --prefix)/bin/pinentry-mac" > ~/.gnupg/gpg-agent.conf
-echo "use-agent" > ~/.gnupg/gpg.conf

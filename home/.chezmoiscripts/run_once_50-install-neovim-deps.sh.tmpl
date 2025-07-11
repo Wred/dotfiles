@@ -3,11 +3,13 @@
 set -eufo pipefail
 
 # VSCode LSPs for HTML/CSS/JSON/ESLint
-sudo sudo npm i -g vscode-langservers-extracted
+sudo npm install -g vscode-langservers-extracted
+
+# Mermaid JS cli for markdown previews
+sudo npm install -g @mermaid-js/mermaid-cli
 
 {{ if (eq .chezmoi.os "darwin") -}}
-brew install yaml-language-server
-brew install python-lsp-server
+brew install yaml-language-server python-lsp-server luarocks ghostscript tectonic basictex pngpaste
 {{ else }}
 sudo snap install yaml-language-server
 sudo apt-get install python3-pylsp
