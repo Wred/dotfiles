@@ -54,3 +54,14 @@ vim.keymap.set('n', '<leader>S', '<cmd>lua require("spectre").toggle()<CR>', {
 })
 vim.wo.relativenumber = true
 
+vim.lsp.enable({
+	"rust_analyzer",
+	"ts_ls",
+	"gopls",
+	"golangci_lint_ls",
+	"ruff",
+	"pyright",
+	"jsonls",
+	"yamlls",
+	"prismals",
+})
