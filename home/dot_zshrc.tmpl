@@ -1,10 +1,15 @@
-# check if parent is foot, then start 
+# some script calls in binds on tmux need PATH envs.  We'll need to 
+# include those before we start tmux
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# check if parent isn't a tmux session or windsurf, then start 
 tmux_run() {
 	parent_process=$(ps -p $PPID -o comm=)
 
 	if [[ "$parent_process" != "windsurf" ]]; then
 		if [ -z "$TMUX" ]; then
-			tmux
+			tmux new -s home
 		fi
 	fi
 }
@@ -69,7 +74,7 @@ alias k='kubectl'
 alias v='vim'
 alias lg='lazygit'
 alias d='docker'
-alias b='bat -p'
+alias b='bat -pp'
 alias m='make'
 alias g='git'
 alias p='python'
@@ -89,8 +94,6 @@ function y() {
 if [ -f $HOME/.zshrc.local ]; then
     source $HOME/.zshrc.local
 fi
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 complete -o nospace -C /usr/local/bin/vault vault
 complete -o nospace -C /usr/local/bin/mc mc
