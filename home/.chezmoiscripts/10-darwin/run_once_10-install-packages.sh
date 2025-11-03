@@ -62,6 +62,7 @@ casks=(
 	## nikitabobko/tap/aerospace
 	zed
 	beekeeper-studio
+	jordanbaird-ice
 )
 
 brew upgrade
