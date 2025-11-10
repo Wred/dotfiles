@@ -18,7 +18,6 @@ formulae=(
 	tmux
 	xz
 	python3
-	pipx
 	packer
 	bat
 	direnv
@@ -67,5 +66,5 @@ casks=(
 
 brew upgrade
 brew install ${formulae[@]}
-brew install --force --cask ${casks[@]} --no-quarantine
+brew install --cask ${casks[@]} --no-quarantine
 
