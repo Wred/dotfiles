@@ -44,19 +44,6 @@ return {
 	},
 
 	{
-		"nvim-tree/nvim-web-devicons",
-		lazy = true
-	},
-
-	{
-		"nvchad/ui",
-		lazy = false,
-		config = function ()
-			require "nvchad"
-		end,
-	},
-
-	{
 		"folke/snacks.nvim",
 		priority = 1000,
 		lazy = false,
@@ -158,7 +145,7 @@ return {
 	},
 
 	{
-		"williamboman/mason.nvim",
+		"mason-org/mason.nvim",
 		opts = {
 			ensure_installed = {
 				"lua-language-server",
@@ -303,16 +290,6 @@ return {
 			'MunifTanjim/nui.nvim',
 			'neovim/nvim-lspconfig',
 			'mfussenegger/nvim-dap',
-			{
-				"williamboman/mason-lspconfig.nvim",
-				opts = {
-					handlers = {
-						["jdtls"] = function()
-							require("java").setup()
-						end,
-					},
-				},
-			},
 		},
 	},
 
