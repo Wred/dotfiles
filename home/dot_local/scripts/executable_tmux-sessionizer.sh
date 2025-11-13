@@ -1,25 +1,30 @@
 #!/usr/bin/env zsh
 
 if [[ $# -eq 1 ]]; then
-    selected=$1
+	selected=$1
 else
-    selected=$(find ~/work ~/.config ~/.local/scripts -mindepth 1 -maxdepth 2 -type d | fzf)
+	if [[ -n $TMUX_SESSIONIZER_SEARCH_DIRS ]]; then
+		directories=$TMUX_SESSIONIZER_SEARCH_DIRS
+	else
+		directories="$HOME/work"
+	fi
+	selected=$(find $directories -mindepth 1 -maxdepth 2 -type d | fzf)
 fi
 
 if [[ -z $selected ]]; then
-    exit 0
+	exit 0
 fi
 
 selected_name=$(basename "$selected" | tr . _)
 tmux_running=$(pgrep tmux)
 
 if [[ -z $TMUX ]] && [[ -z $tmux_running ]]; then
-    tmux new-session -s $selected_name -c $selected
-    exit 0
+	tmux new-session -s $selected_name -c $selected
+	exit 0
 fi
 
 if ! tmux has-session -t=$selected_name 2> /dev/null; then
-    tmux new-session -ds $selected_name -c $selected
+	tmux new-session -ds $selected_name -c $selected
 fi
 
 tmux switch-client -t $selected_name
