@@ -9,7 +9,7 @@ tmux_run() {
 
 	if [[ "$parent_process" != "windsurf" ]]; then
 		if [ -z "$TMUX" ]; then
-			tmux new -s home
+			tmux new -A -s home
 		fi
 	fi
 }
