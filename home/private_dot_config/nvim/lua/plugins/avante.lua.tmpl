@@ -5,9 +5,27 @@ return {
 		lazy = false,
 		version = false, -- set this if you want to always pull the latest change
 		opts = {
+{{- if .personal }}
+			-- add any opts here
+			provider = "claude",
+			providers = {
+				---@type AvanteSupportedProvider
+				claude = {
+					endpoint = "https://api.anthropic.com",
+					model = "claude-sonnet-4-5-20250929",
+					timeout = 30000, -- Timeout in milliseconds
+					context_window = 200000,
+					extra_request_body = {
+						temperature = 0.75,
+						max_tokens = 64000,
+					},
+				},
+			},
+{{ else }}
 			-- add any opts here
 			provider = "azure",
 			providers = {
+				---@type AvanteSupportedProvider
 				azure = {
 					endpoint = "https://platformx.openai.azure.com",
 					deployment = "gpt-4o",
@@ -15,6 +33,7 @@ return {
 					max_tokens = 16384,
 				},
 			},
+{{ end -}}
 		},
 		-- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
 		build = "make",
