@@ -44,6 +44,11 @@ formulae=(
 	resvg
 	imagemagick
 	hugo
+	tree
+	dust
+	tlrc
+	bottom
+	gh
 )
 
 casks=(
