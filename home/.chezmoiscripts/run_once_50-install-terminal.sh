@@ -1,5 +1,4 @@
 #!/usr/bin/env zsh
-set -eufo pipefail
 
 # install tmux plugin manager
 if [ ! -d ~/.tmux/plugins/tpm ] ; then

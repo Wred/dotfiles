@@ -299,6 +299,9 @@ return {
 		config = function()
 			require('spectre').setup({ is_block_ui_break = true })
 		end,
+		keys = {
+			{'<leader>S', function() require("spectre").toggle() end, desc = "Toggle Spectre" },
+		},
 	},
 
 	{

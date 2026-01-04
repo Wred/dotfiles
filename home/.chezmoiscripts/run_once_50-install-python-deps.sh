@@ -1,5 +1,4 @@
 #!/usr/bin/env zsh
-set -eufo pipefail
 
 # install uv
 curl -LsSf https://astral.sh/uv/install.sh | sh

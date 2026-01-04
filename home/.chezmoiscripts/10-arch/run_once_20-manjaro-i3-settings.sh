@@ -1,5 +1,4 @@
 #!/usr/bin/env zsh
-set -eufo pipefail
 
 sed -i 's/Pale Moon.desktop/google-chrome.desktop/' ~/.config/mimeapps.list
 sed -i 's/palemoon/google-chrome-stable/' ~/.i3/config

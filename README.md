@@ -52,8 +52,16 @@ chezmoi init --apply --verbose git@github.com:Wred/dotfiles.git
 
 # Postflight
 
+## tmux
 Install the tmux packages using `prefix-I` to start the tpm install.
+
+## Neovim
 Set the Neovim theme with `<leader> th`.
+
+## tmux sessionizer config 
+The default folder for tmux-sessionizer (for creating new tmux sessions) is
+`$HOME/projects` but you can change that in the `~/.secrets` file and it
+won't get overwritten.
 
 # GPG
 

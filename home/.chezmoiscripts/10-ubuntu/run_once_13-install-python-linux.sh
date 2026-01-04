@@ -1,5 +1,4 @@
 #!/usr/bin/env zsh
-set -eufo pipefail
 
 sudo add-apt-repository --yes ppa:deadsnakes/ppa
 sudo apt install python3.11

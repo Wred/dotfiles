@@ -1,5 +1,4 @@
 #!/usr/bin/env zsh
-set -eufo pipefail
 
 repositories=()
 packages=()
@@ -34,6 +33,8 @@ packages+=(
 	imagemagick
 	ripgrep
 	fd-find
+	keyd
+	gh
 )
 
 snaps+=(

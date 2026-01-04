@@ -1,5 +1,4 @@
 #!/usr/bin/env zsh
-set -eufo pipefail
 
 #
 # ANDRE: NOTE: this is only necessary until 25.10 is released.

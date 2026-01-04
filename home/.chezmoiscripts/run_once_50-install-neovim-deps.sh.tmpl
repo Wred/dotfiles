@@ -1,6 +1,5 @@
 {{ if (eq .chezmoi.os "linux" "darwin") -}}
 #!/usr/bin/env zsh
-set -eufo pipefail
 
 # VSCode LSPs for HTML/CSS/JSON/ESLint
 sudo npm install -g vscode-langservers-extracted
