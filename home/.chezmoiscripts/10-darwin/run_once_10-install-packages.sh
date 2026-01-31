@@ -66,6 +66,7 @@ casks=(
 	zed
 	beekeeper-studio
 	jordanbaird-ice
+	handy
 )
 
 brew upgrade

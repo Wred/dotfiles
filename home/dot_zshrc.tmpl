@@ -95,6 +95,9 @@ if [ -f $HOME/.zshrc.local ]; then
     source $HOME/.zshrc.local
 fi
 
+# load git worktree scripts
+source $HOME/.local/scripts/gwt.zsh
+
 complete -o nospace -C /usr/local/bin/vault vault
 complete -o nospace -C /usr/local/bin/mc mc
 
