@@ -12,6 +12,12 @@ config.scrollback_lines = 10000
 
 config.window_close_confirmation = 'NeverPrompt'
 
+wezterm.on('gui-startup', function(cmd)
+  local tab, pane, window = wezterm.mux.spawn_window(cmd or {})
+  local gui_window = window:gui_window();
+  gui_window:perform_action(wezterm.action.ToggleFullScreen, pane)
+end)
+
 config.max_fps = 120
 config.window_decorations = "RESIZE"
 config.window_padding = {
