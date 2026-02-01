@@ -35,6 +35,7 @@ packages+=(
 	fd-find
 	keyd
 	gh
+	peek
 )
 
 snaps+=(
