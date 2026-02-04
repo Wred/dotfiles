@@ -1,4 +1,3 @@
-{{- if .kubernetes -}}
 #!/usr/bin/env zsh
 
 brew install \
@@ -41,4 +40,3 @@ kubectl krew install oidc-login
 kubectl krew install ctx
 kubectl krew install ns
 
-{{ end }}

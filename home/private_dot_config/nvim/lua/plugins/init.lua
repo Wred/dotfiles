@@ -62,7 +62,14 @@ return {
 				notification = {
 					wo = { wrap = true } -- Wrap notifications
 				}
-			}
+			},
+			lazygit = {
+				config =  {
+					gui = {
+						screenMode = "normal",
+					},
+				},
+			},
 		},
 		keys = {
 			{ "<leader>.",  function() Snacks.scratch() end, desc = "Toggle Scratch Buffer" },
