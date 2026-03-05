@@ -5,6 +5,9 @@ packages=()
 snaps=()
 classic_snaps=()
 
+repositories+=(
+	ppa:keyd-team/ppa
+)
 
 packages+=(
 	make
@@ -31,9 +34,8 @@ packages+=(
 	luarocks
 	wl-clipboard
 	imagemagick
-	ripgrep
-	fd-find
 	keyd
+	ripgrep
 	gh
 	peek
 )
