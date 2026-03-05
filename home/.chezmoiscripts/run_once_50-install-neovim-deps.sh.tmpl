@@ -2,10 +2,10 @@
 #!/usr/bin/env zsh
 
 # VSCode LSPs for HTML/CSS/JSON/ESLint
-sudo npm install -g vscode-langservers-extracted
+npm install -g vscode-langservers-extracted
 
 # Mermaid JS cli for markdown previews
-sudo npm install -g @mermaid-js/mermaid-cli
+npm install -g @mermaid-js/mermaid-cli
 
 {{ if (eq .chezmoi.os "darwin") -}}
 brew install yaml-language-server python-lsp-server luarocks ghostscript tectonic basictex pngpaste
@@ -14,6 +14,6 @@ sudo snap install yaml-language-server
 sudo apt-get install python3-pylsp
 {{ end -}}
 
-sudo npm install -g @prisma/language-server
+npm install -g @prisma/language-server
 
 {{ end -}}
