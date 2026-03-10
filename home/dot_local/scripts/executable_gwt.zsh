@@ -7,19 +7,15 @@ gwta() {
     return 1
   fi
 
-  local repo_root=$(git rev-parse --show-toplevel)
-  if [[ $PWD != $repo_root ]]; then
-    echo "Error: Must be at repository root ($repo_root)"
-    return 1
-  fi
-
   local branch=$1
   if [[ -z $branch ]]; then
     echo "Usage: gwta <branch-name>"
     return 1
   fi
 
-  local dir="../$(basename $PWD)-$branch"
+  # Use the main worktree path so this works from any worktree
+  local main_tree=$(git worktree list | head -1 | awk '{print $1}')
+  local dir="$(dirname $main_tree)/$(basename $main_tree)-$branch"
 
   if git show-ref --verify --quiet "refs/heads/$branch"; then
     git worktree add "$dir" "$branch"
@@ -48,8 +44,8 @@ gwtrm() {
     return 1
   fi
 
-  local repo_root=$(git rev-parse --show-toplevel)
-  local dir="$(dirname $repo_root)/$(basename $repo_root)-$branch"
+  local main_tree=$(git worktree list | head -1 | awk '{print $1}')
+  local dir="$(dirname $main_tree)/$(basename $main_tree)-$branch"
 
   if [[ -d $dir ]]; then
     git worktree remove "$dir"
