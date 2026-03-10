@@ -1,75 +1,74 @@
 #!/usr/bin/env zsh
 
-
 formulae=(
+	bat
+	bottom
+	coreutils
 	curl
+	direnv
+	dive
 	dockutil
+	dust
+	fd
+	ffmpeg
+	gh
 	git-lfs
 	gnu-units
-	gpg2
 	gnupg
-	pinentry-mac
 	go
+	golangci-lint
+	gpg2
+	gradle
+	htop
+	hugo
+	imagemagick
 	jq
-	yq
-	pkg-config
-	ripgrep
-	tmux
-	xz
-	python3
+	lazygit
+	lsd
+	mike-engel/jwt-cli/jwt-cli
+	neovim
+	nvm
 	packer
-	bat
-	direnv
+	pinentry-mac
+	pkg-config
+	poppler
+	pulumi
+	python3
+	resvg
+	ripgrep
+	sad
+	sevenzip
+	tlrc
+	tmux
+	tree
 	watch
 	wget
-	coreutils
-	mike-engel/jwt-cli/jwt-cli
-	gradle
-	lsd
-	neovim
-	fd
-	lazygit
-	htop
-	golangci-lint
-	dive
-	sad
-	nvm
-	pulumi
+	xz
 	yazi
-	ffmpeg
-	sevenzip
-	poppler
+	yq
 	zoxide
-	resvg
-	imagemagick
-	hugo
-	tree
-	dust
-	tlrc
-	bottom
-	gh
 )
 
 casks=(
 	## docker
 	## google-chrome
-	hammerspoon
+	## nikitabobko/tap/aerospace
 	## visual-studio-code
 	alt-tab
 	apptivate
 	audacity
-	wezterm
-	rectangle
-	karabiner-elements
-	font-jetbrains-mono-nerd-font
-	## nikitabobko/tap/aerospace
-	zed
 	beekeeper-studio
-	jordanbaird-ice
+	font-jetbrains-mono-nerd-font
+	hammerspoon
 	handy
+	jordanbaird-ice
+	karabiner-elements
+	rectangle
+	wezterm
+	zed
 )
 
 brew upgrade
 brew install ${formulae[@]}
-brew install --cask ${casks[@]} --no-quarantine
+brew install --cask ${casks[@]}
 
