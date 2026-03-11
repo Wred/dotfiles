@@ -63,7 +63,8 @@ go env -w GOPATH=$HOME/go
 export PATH="$PATH:$(go env GOPATH)/bin"
 
 alias cm='chezmoi'
-alias ca='chezmoi apply'
+alias ca='chezmoi apply --exclude=scripts'
+alias cas='chezmoi apply'
 
 alias ls='lsd --group-dirs=first'
 alias l='ls -1Al'
