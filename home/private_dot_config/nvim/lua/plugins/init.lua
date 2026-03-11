@@ -64,9 +64,15 @@ return {
 				}
 			},
 			lazygit = {
+				win = {
+					width = 0,
+					height = 0,
+					border = "none",
+				},
 				config =  {
 					gui = {
 						screenMode = "normal",
+						portraitMode = "never",
 					},
 				},
 			},
