@@ -5,6 +5,7 @@ local wezterm = require 'wezterm'
 local config = wezterm.config_builder()
 
 config.use_ime = false
+config.send_composed_key_when_right_alt_is_pressed = false
 config.font = wezterm.font 'JetBrainsMono Nerd Font'
 config.font_size = 15
 config.enable_tab_bar = false
