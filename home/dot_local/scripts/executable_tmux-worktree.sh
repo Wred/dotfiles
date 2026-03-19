@@ -19,7 +19,12 @@ if [[ -n $match ]]; then
 	selected="$match"
 elif [[ -n $query ]]; then
 	# User typed something that didn't match — offer to create it
-	read -q "reply?Branch '$query' not found. Create a new worktree? (y/n) " || { echo; exit 0; }
+	while true; do
+		read "reply?Branch '$query' not found. Create a new worktree? (Y/n) "
+		[[ -z $reply || $reply == [yY] ]] && break
+		[[ $reply == [nN] ]] && exit 0
+		echo "Invalid input. Please enter y or n."
+	done
 	echo
 
 	gwta "$query"
