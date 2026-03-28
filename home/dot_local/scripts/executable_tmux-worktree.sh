@@ -10,9 +10,22 @@ fi
 source "$(dirname "$0")/gwt.zsh"
 
 # Select a worktree via fzf (--print-query to capture typed input)
-result=$(git worktree list | fzf --print-query)
-query=$(echo "$result" | sed -n '1p')
-match=$(echo "$result" | sed -n '2p' | awk '{print $1}')
+# ctrl-x: delete worktree, enter: select worktree
+while true; do
+	result=$(git worktree list | fzf --print-query \
+		--header "ctrl-x: delete worktree" \
+		--expect "ctrl-x")
+	query=$(echo "$result" | sed -n '1p')
+	key=$(echo "$result" | sed -n '2p')
+	match=$(echo "$result" | sed -n '3p' | awk '{print $1}')
+
+	if [[ $key == "ctrl-x" && -n $match ]]; then
+		branch=$(echo "$result" | sed -n '3p' | awk '{print $3}' | tr -d '[]')
+		gwtrm "$branch"
+		continue
+	fi
+	break
+done
 
 if [[ -n $match ]]; then
 	# User selected an existing worktree

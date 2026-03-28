@@ -38,9 +38,15 @@ gwtrm() {
     return 1
   fi
 
+  local force=false
+  if [[ $1 == "-f" ]]; then
+    force=true
+    shift
+  fi
+
   local branch=$1
   if [[ -z $branch ]]; then
-    echo "Usage: gwtrm <branch-name>"
+    echo "Usage: gwtrm [-f] <branch-name>"
     return 1
   fi
 
@@ -48,11 +54,27 @@ gwtrm() {
   local dir="$(dirname $main_tree)/$(basename $main_tree)-$branch"
 
   if [[ -d $dir ]]; then
+    if [[ $force != true ]]; then
+      echo "This will remove worktree '$dir' and delete branch '$branch'."
+      read -q "reply?Are you sure? [y/N] "
+      echo
+      if [[ $reply != "y" ]]; then
+        echo "Aborted."
+        return 0
+      fi
+    fi
     git worktree remove "$dir"
     echo "Worktree removed: $dir"
   else
     echo "Error: Worktree not found at $dir"
     return 1
+  fi
+
+  git worktree prune
+
+  if git show-ref --verify --quiet "refs/heads/$branch"; then
+    git branch -D "$branch"
+    echo "Branch deleted: $branch"
   fi
 }
 
