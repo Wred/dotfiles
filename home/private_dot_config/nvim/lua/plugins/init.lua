@@ -164,7 +164,6 @@ return {
 				"lua-language-server",
 				"gopls",
 				"golangci-lint-langserver",
-				"rust-analyzer",
 				"typescript-language-server",
 				"ruff",
 				"pyright",
