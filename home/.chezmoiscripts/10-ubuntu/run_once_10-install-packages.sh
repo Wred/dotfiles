@@ -44,6 +44,7 @@ snaps+=(
 	spotify
 	signal-desktop
 	standard-notes
+	doctl
 )
 
 classic_snaps+=(
@@ -75,4 +76,7 @@ done
 # fix bat
 mkdir -p ~/.local/bin
 [ -L ~/.local/bin/bat ] || ln -s /usr/bin/batcat ~/.local/bin/bat
+
+# flarectl
+go install github.com/cloudflare/cloudflare-go/cmd/flarectl@latest
 
