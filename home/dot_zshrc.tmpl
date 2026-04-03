@@ -157,3 +157,11 @@ export PATH="$PATH:$HOME/.codeium/windsurf/bin"
 
 # opencode
 export PATH="$PATH:$HOME/.opencode/bin"
+
+# pnpm
+export PNPM_HOME="$HOME/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end

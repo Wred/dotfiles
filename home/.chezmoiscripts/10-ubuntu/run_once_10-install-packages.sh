@@ -1,15 +1,10 @@
 #!/usr/bin/env zsh
 
-repositories=()
-packages=()
-snaps=()
-classic_snaps=()
-
-repositories+=(
+repositories=(
 	ppa:keyd-team/ppa
 )
 
-packages+=(
+packages=(
 	make
 	curl
 	vim
@@ -29,7 +24,6 @@ packages+=(
 	xcape
 	fd-find
 	nodejs
-	npm
 	pipx
 	luarocks
 	wl-clipboard
@@ -40,14 +34,18 @@ packages+=(
 	peek
 )
 
-snaps+=(
+packages_remove=(
+	npm
+)
+
+snaps=(
 	spotify
 	signal-desktop
 	standard-notes
 	doctl
 )
 
-classic_snaps+=(
+classic_snaps=(
 	code
 	nvim
 )
@@ -62,6 +60,7 @@ done
 
 sudo apt update
 sudo apt --yes dist-upgrade
+sudo apt purge --auto-remove -y ${packages_remove[@]}
 sudo apt install -y ${packages[@]}
 
 for snap in ${snaps[@]}; do
@@ -72,7 +71,6 @@ for classic_snap in ${classic_snaps[@]}; do
 	sudo snap install $classic_snap --classic
 done
 
-
 # fix bat
 mkdir -p ~/.local/bin
 [ -L ~/.local/bin/bat ] || ln -s /usr/bin/batcat ~/.local/bin/bat
@@ -80,3 +78,5 @@ mkdir -p ~/.local/bin
 # flarectl
 go install github.com/cloudflare/cloudflare-go/cmd/flarectl@latest
 
+# zed
+curl -f https://zed.dev/install.sh | sh
