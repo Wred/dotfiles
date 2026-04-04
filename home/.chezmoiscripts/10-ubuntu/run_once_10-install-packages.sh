@@ -1,9 +1,5 @@
 #!/usr/bin/env zsh
 
-repositories=(
-	ppa:keyd-team/ppa
-)
-
 packages=(
 	make
 	curl
@@ -16,24 +12,15 @@ packages=(
 	zsh
 	htop
 	golang-go
-	krita
 	lsd
 	tmux
-	xclip
-	skanlite
-	xcape
 	fd-find
 	nodejs
 	pipx
 	luarocks
-	wl-clipboard
 	imagemagick
-	keyd
 	ripgrep
 	gh
-	peek
-	hyprland
-	wofi
 )
 
 packages_remove=(
@@ -41,24 +28,16 @@ packages_remove=(
 )
 
 snaps=(
-	spotify
-	signal-desktop
-	standard-notes
 	doctl
 )
 
 classic_snaps=(
-	code
 	nvim
 )
 
 
 ################################
 # Now install
-
-for repository in ${repositories[@]}; do
-	sudo add-apt-repository --yes $repository
-done
 
 sudo apt update
 sudo apt --yes dist-upgrade
@@ -79,6 +58,3 @@ mkdir -p ~/.local/bin
 
 # flarectl
 go install github.com/cloudflare/cloudflare-go/cmd/flarectl@latest
-
-# zed
-curl -f https://zed.dev/install.sh | sh

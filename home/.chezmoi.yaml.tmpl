@@ -1,8 +1,12 @@
-{{- $personal := promptBool "Personal" -}}
-{{- $gitname := promptString "Git: Name" -}}
-{{- $gitemail := promptString "Git: Email" -}}
-{{- $gitsigningkey := promptString "Git: GPG signing key ID" -}}
-{{- $kubernetes := promptBool "Add Kubernetes" -}}
+{{- $personal := promptBool "Personal" (index .chezmoi.config.data "personal" | default false) -}}
+{{- $gitname := promptString "Git: Name" (index .chezmoi.config.data "gitname" | default "") -}}
+{{- $gitemail := promptString "Git: Email" (index .chezmoi.config.data "gitemail" | default "") -}}
+{{- $gitsigningkey := promptString "Git: GPG signing key ID" (index .chezmoi.config.data "gitsigningkey" | default "") -}}
+{{- $kubernetes := promptBool "Add Kubernetes" (index .chezmoi.config.data "kubernetes" | default false) -}}
+{{- $desktop := false -}}
+{{- if eq .chezmoi.os "linux" -}}
+{{-   $desktop = eq (trim (output "systemctl" "get-default")) "graphical.target" -}}
+{{- end -}}
 sourceVCS:
   autoCommit: true
 merge:
@@ -15,3 +19,4 @@ data:
   gitemail: "{{ $gitemail }}"
   gitsigningkey: "{{ $gitsigningkey }}"
   kubernetes: {{ $kubernetes }}
+  desktop: {{ $desktop }}

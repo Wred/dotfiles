@@ -6,10 +6,16 @@
 .config/terminator
 .config/karabiner
 .hammerspoon
+{{ if not .desktop -}}
+.chezmoiscripts/10-ubuntu-desktop/**
+.chezmoiexternals/linux.nerdfont.toml
+.config/hypr
+{{ end -}}
 {{ else if (eq .chezmoi.osRelease.id "manjaro") -}}
 # Arch
 .chezmoiscripts/10-darwin/**
 .chezmoiscripts/10-ubuntu/**
+.chezmoiscripts/10-ubuntu-desktop/**
 .config/karabiner
 .hammerspoon
 {{ end -}}
@@ -17,6 +23,7 @@
 {{ if ne .chezmoi.os "linux" -}}
 # MacOS
 .chezmoiscripts/10-ubuntu/**
+.chezmoiscripts/10-ubuntu-desktop/**
 .chezmoiscripts/10-arch/**
 .config/terminator
 .chezmoiexternals/linux.nerdfont.toml
