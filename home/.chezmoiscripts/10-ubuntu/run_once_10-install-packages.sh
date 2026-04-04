@@ -32,6 +32,8 @@ packages=(
 	ripgrep
 	gh
 	peek
+	hyprland
+	wofi
 )
 
 packages_remove=(
