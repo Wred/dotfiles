@@ -27,5 +27,6 @@ if [ ! -d ~/.fzf ]; then
     ~/.fzf/install --completion --key-bindings --no-fish --no-bash --no-update-rc
 else
     git -C ~/.fzf pull
+    ~/.fzf/install --bin
 fi
 
