@@ -42,8 +42,9 @@ elif [[ -n $query ]]; then
 
 	gwta "$query"
 
-	# Resolve the new worktree path
-	selected=$(git worktree list | grep -F "$query" | awk '{print $1}')
+	# Resolve the new worktree path using the sanitized branch name
+	local sanitized=${${query// /-}:l}
+	selected=$(git worktree list | grep -F "$sanitized" | awk '{print $1}')
 	if [[ -z $selected ]]; then
 		echo "Error: Failed to find newly created worktree"
 		exit 1

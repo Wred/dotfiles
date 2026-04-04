@@ -7,7 +7,7 @@ gwta() {
     return 1
   fi
 
-  local branch=$1
+  local branch=${${1// /-}:l}
   if [[ -z $branch ]]; then
     echo "Usage: gwta <branch-name>"
     return 1
@@ -44,7 +44,7 @@ gwtrm() {
     shift
   fi
 
-  local branch=$1
+  local branch=${${1// /-}:l}
   if [[ -z $branch ]]; then
     echo "Usage: gwtrm [-f] <branch-name>"
     return 1
