@@ -8,6 +8,16 @@
 
 direction="$1"
 
+# hyprctl needs HYPRLAND_INSTANCE_SIGNATURE; tmux may have a missing or stale value
+if ! hyprctl monitors >/dev/null 2>&1; then
+  for _sig in $(ls /run/user/$(id -u)/hypr/ 2>/dev/null); do
+    if HYPRLAND_INSTANCE_SIGNATURE="$_sig" hyprctl monitors >/dev/null 2>&1; then
+      export HYPRLAND_INSTANCE_SIGNATURE="$_sig"
+      break
+    fi
+  done
+fi
+
 case "$direction" in
   left)  tmux_flag="-L"; at_edge="#{pane_at_left}"  ; hypr_dir="l"; alt_key="h" ;;
   down)  tmux_flag="-D"; at_edge="#{pane_at_bottom}"; hypr_dir="d"; alt_key="j" ;;
