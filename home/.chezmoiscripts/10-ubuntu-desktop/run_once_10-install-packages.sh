@@ -14,6 +14,8 @@ packages=(
 	peek
 	hyprland
 	wofi
+	libgtk-layer-shell0 # required for handy
+	wtype # required for handy paste on Wayland/Hyprland
 )
 
 snaps=(
@@ -47,3 +49,9 @@ done
 
 # zed
 curl -f https://zed.dev/install.sh | sh
+
+# handy
+HANDY_VERSION=$(curl -s "https://api.github.com/repos/cjpais/handy/releases/latest" | \grep -Po '"tag_name": *"v\K[^"]*')
+curl -Lo /tmp/handy.deb "https://github.com/cjpais/handy/releases/download/v${HANDY_VERSION}/Handy_${HANDY_VERSION}_amd64.deb"
+sudo apt install -y /tmp/handy.deb
+rm /tmp/handy.deb
