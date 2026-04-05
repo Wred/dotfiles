@@ -7,7 +7,7 @@ local config = wezterm.config_builder()
 config.use_ime = false
 config.send_composed_key_when_right_alt_is_pressed = false
 config.font = wezterm.font 'JetBrainsMono Nerd Font'
-config.font_size = 15
+config.font_size = wezterm.target_triple:find('linux') and 10 or 15
 config.enable_tab_bar = false
 config.scrollback_lines = 10000
 
