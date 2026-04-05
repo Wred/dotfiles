@@ -14,6 +14,7 @@ packages=(
 	peek
 	hyprland
 	wofi
+	waybar
 	libgtk-layer-shell0 # required for handy
 	xclip # required for handy paste (XWayland clipboard)
 	xdotool # required for handy paste (XWayland key simulation)
