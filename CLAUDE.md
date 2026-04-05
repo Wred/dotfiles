@@ -13,6 +13,8 @@ The chezmoi source root is `/home/andre/.local/share/chezmoi/home/` (set via `.c
 
 **File permissions:** Chezmoi manages permissions via filename prefixes, not the actual file bits in the source repo. Do NOT run `chmod` on files in the chezmoi source directory. Scripts with `run_` or `run_once_` prefixes are executed by chezmoi without needing the executable bit set in the source.
 
+**When a package needs to be installed**, add it to the appropriate install script — do NOT suggest `sudo apt install`. Use `home/.chezmoiscripts/10-ubuntu-desktop/` for desktop-only packages, or `home/.chezmoiscripts/10-ubuntu/` for all Ubuntu machines. The assumption is that after any change, `chezmoi apply` will be run to deploy everything.
+
 **Install scripts** run in order by filename prefix number:
 - `home/.chezmoiscripts/` — cross-platform (all machines)
 - `home/.chezmoiscripts/10-ubuntu/` — Ubuntu (server + desktop)
