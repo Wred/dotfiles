@@ -15,6 +15,10 @@ The chezmoi source root is `/home/andre/.local/share/chezmoi/home/` (set via `.c
 
 **When a package needs to be installed**, add it to the appropriate install script — do NOT suggest `sudo apt install`. Use `home/.chezmoiscripts/10-ubuntu-desktop/` for desktop-only packages, or `home/.chezmoiscripts/10-ubuntu/` for all Ubuntu machines. The assumption is that after any change, `chezmoi apply` will be run to deploy everything.
 
+**Applying changes:** After making changes, run the appropriate apply command:
+- Config-only changes (no script modifications): `chezmoi apply --exclude=scripts` — no sudo needed, run this automatically after config edits.
+- Changes that include install scripts: `chezmoi apply` — requires sudo for package installation.
+
 **Install scripts** run in order by filename prefix number:
 - `home/.chezmoiscripts/` — cross-platform (all machines)
 - `home/.chezmoiscripts/10-ubuntu/` — Ubuntu (server + desktop)
