@@ -57,3 +57,9 @@ HANDY_VERSION=$(curl -s "https://api.github.com/repos/cjpais/handy/releases/late
 curl -Lo /tmp/handy.deb "https://github.com/cjpais/handy/releases/download/v${HANDY_VERSION}/Handy_${HANDY_VERSION}_amd64.deb"
 sudo apt install -y /tmp/handy.deb
 rm /tmp/handy.deb
+
+# obsidian
+OBSIDIAN_VERSION=$(curl -s "https://api.github.com/repos/obsidianmd/obsidian-releases/releases/latest" | \grep -Po '"tag_name": *"v\K[^"]*')
+curl -Lo /tmp/obsidian.deb "https://github.com/obsidianmd/obsidian-releases/releases/download/v${OBSIDIAN_VERSION}/obsidian_${OBSIDIAN_VERSION}_amd64.deb"
+sudo apt install -y /tmp/obsidian.deb
+rm /tmp/obsidian.deb
