@@ -3,12 +3,12 @@
 if [[ $# -eq 1 ]]; then
 	selected=$1
 else
-	if [[ -n $TMUX_SESSIONIZER_SEARCH_DIRS ]]; then
-		directories=$TMUX_SESSIONIZER_SEARCH_DIRS
-	else
-		directories="$HOME/work"
-	fi
-	selected=$(find $directories -mindepth 1 -maxdepth 2 -type d | fzf)
+	directories=${TMUX_SESSIONIZER_SEARCH_DIRS:-"$HOME/work"}
+	extra_dirs=${TMUX_SESSIONIZER_EXTRA_DIRS:-"$HOME/.local/share/chezmoi"}
+	selected=$({ find $directories -mindepth 2 -maxdepth 2 -type d; echo $extra_dirs; } \
+		| awk -F/ '{print $0 "\t" $(NF-1) "/" $NF}' \
+		| fzf --delimiter='\t' --with-nth=2 \
+		| cut -f1)
 fi
 
 if [[ -z $selected ]]; then
