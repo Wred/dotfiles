@@ -9,10 +9,6 @@
 {{ if not .desktop -}}
 .chezmoiscripts/10-ubuntu-desktop/**
 .chezmoiexternals/linux.nerdfont.toml
-.config/hypr
-.config/waybar
-.local/scripts/handy-paste.sh
-.local/share/com.pais.handy/**
 {{ end -}}
 {{ else if (eq .chezmoi.osRelease.id "manjaro") -}}
 # Arch
@@ -30,8 +26,4 @@
 .chezmoiscripts/10-arch/**
 .config/terminator
 .chezmoiexternals/linux.nerdfont.toml
-.config/hypr
-.config/waybar
-.local/scripts/handy-paste.sh
-.local/share/com.pais.handy/**
 {{- end }}
