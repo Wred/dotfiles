@@ -1,16 +1,22 @@
 {{ if (eq .chezmoi.os "linux" "darwin") -}}
 #!/usr/bin/env zsh
 
+mkdir -p "$HOME/.local/share/pnpm"
+
 # VSCode LSPs for HTML/CSS/JSON/ESLint
 pnpm install -g vscode-langservers-extracted
 
 # Mermaid JS cli for markdown previews
 pnpm install -g @mermaid-js/mermaid-cli
 
+# YAML language server
+pnpm install -g yaml-language-server
+
 {{ if (eq .chezmoi.os "darwin") -}}
-brew install yaml-language-server python-lsp-server luarocks ghostscript tectonic basictex pngpaste
+brew install python-lsp-server luarocks ghostscript tectonic basictex pngpaste
+{{ else if (eq .chezmoi.osRelease.id "arch") -}}
+sudo pacman -S --needed --noconfirm python-lsp-server ghostscript tectonic
 {{ else }}
-sudo snap install yaml-language-server
 sudo apt-get install python3-pylsp
 {{ end -}}
 

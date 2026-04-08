@@ -64,19 +64,23 @@ sudo apt-get install --yes \
 )
 
 
-{{else if (eq .chezmoi.osRelease.id "manjaro") -}}
-sudo pacman -S --noconfirm \
-	containerd \
-	docker \
-	helm \
-	helmfile \
-	kubectl \
-	krew
-
-
 {{- end}}
 
 [ -d ~/.zsh/completion/ ] || mkdir -p ~/.zsh/completion/
+
+# k9s
+K9S_VERSION=$(curl -s https://api.github.com/repos/derailed/k9s/releases/latest | grep '"tag_name"' | grep -Po 'v[^"]+')
+curl -sL "https://github.com/derailed/k9s/releases/download/${K9S_VERSION}/k9s_Linux_amd64.tar.gz" | tar xz -C /tmp
+sudo mv /tmp/k9s /usr/local/bin
+
+# kustomize
+curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash
+sudo mv kustomize /usr/local/bin
+
+# helmfile
+HELMFILE_VERSION=$(curl -s https://api.github.com/repos/helmfile/helmfile/releases/latest | grep '"tag_name"' | grep -Po 'v[^"]+')
+curl -sL "https://github.com/helmfile/helmfile/releases/download/${HELMFILE_VERSION}/helmfile_${HELMFILE_VERSION#v}_linux_amd64.tar.gz" | tar xz -C /tmp
+sudo mv /tmp/helmfile /usr/local/bin
 
 # install eksctl
 # https://eksctl.io/introduction/#installation
@@ -92,5 +96,13 @@ kubectl completion zsh > ~/.zsh/completion/_kubectl
 
 # add shell completion for kind
 $(go env GOPATH)/bin/kind completion zsh  > ~/.zsh/completion/_kind
+
+# helm diff plugin (required for helmfile)
+helm plugin uninstall diff || true
+helm plugin install --verify=false https://github.com/databus23/helm-diff
+
+# krew plugins
+kubectl krew install ctx
+kubectl krew install ns
 
 {{ end }}
