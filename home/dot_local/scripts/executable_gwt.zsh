@@ -55,7 +55,7 @@ gwtrm() {
 
   if [[ -d $dir ]]; then
     if [[ $force != true ]]; then
-      echo "This will remove worktree '$dir' and delete branch '$branch'."
+      echo "This will remove worktree '$dir:t' and delete branch '$branch'."
       read -q "reply?Are you sure? [y/N] "
       echo
       if [[ $reply != "y" ]]; then
@@ -63,8 +63,21 @@ gwtrm() {
         return 0
       fi
     fi
-    git worktree remove "$dir"
-    echo "Worktree removed: $dir"
+    if [[ -n $(git -C "$dir" status --porcelain 2>/dev/null) ]]; then
+      echo "Warning: worktree has uncommitted changes:"
+      git -C "$dir" status --short
+      echo
+      read -q "force_reply?Remove anyway? [y/N] "
+      echo
+      if [[ $force_reply != "y" ]]; then
+        echo "Aborted."
+        return 0
+      fi
+      git worktree remove --force "$dir"
+    else
+      git worktree remove "$dir"
+    fi
+    echo "Worktree removed: $dir:t"
   else
     echo "Error: Worktree not found at $dir"
     return 1

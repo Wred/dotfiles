@@ -12,15 +12,29 @@ source "$(dirname "$0")/gwt.zsh"
 # Select a worktree via fzf (--print-query to capture typed input)
 # ctrl-x: delete worktree, enter: select worktree
 while true; do
-	result=$(git worktree list | fzf --print-query \
+	worktree_list=$(git worktree list | while read -r line; do
+		path=${line%% *}
+		folder=${path:t}
+		session=${${folder}//./_}
+		branch_field=${line##* }
+		branch=${branch_field//[\[\]]/}
+		if /opt/homebrew/bin/tmux has-session -t="$session" 2>/dev/null; then
+			echo "${path}"$'\t'$'\033[33m'"${branch}"$'\033[0m'
+		else
+			echo "${path}"$'\t'"${branch}"
+		fi
+	done)
+
+	result=$(echo "$worktree_list" | fzf --ansi --delimiter=$'\t' --with-nth=2 --print-query \
 		--header "ctrl-x: delete worktree" \
 		--expect "ctrl-x")
 	query=$(echo "$result" | sed -n '1p')
 	key=$(echo "$result" | sed -n '2p')
-	match=$(echo "$result" | sed -n '3p' | awk '{print $1}')
+	selected_line=$(echo "$result" | sed -n '3p')
+	match=${selected_line%%$'\t'*}
 
 	if [[ $key == "ctrl-x" && -n $match ]]; then
-		branch=$(echo "$result" | sed -n '3p' | awk '{print $3}' | tr -d '[]')
+		branch=${selected_line#*$'\t'}
 		gwtrm "$branch"
 		continue
 	fi
