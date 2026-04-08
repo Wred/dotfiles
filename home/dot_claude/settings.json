@@ -73,7 +73,8 @@
       "Bash(uv tool list:*)",
       "Bash(uv tool run:*)",
       "Bash(uv cache info:*)",
-      "Bash(uv version:*)"
+      "Bash(uv version:*)",
+      "Bash(grep:*)"
     ],
     "ask": [
       "Bash(git push:*)",
