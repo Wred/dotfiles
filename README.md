@@ -20,11 +20,11 @@ chezmoi init --apply --verbose git@github.com:Wred/dotfiles.git
 *Note*: the stop for the apt service seems necessary to remove the lock likely taken by auto-update before installing git
 
 ## Arch
-To install on Manjaro-i3 (https://manjaro.org/downloads/community/i3/):
+To install on Arch:
 
 ```sh
 pacman -S --noconfirm chezmoi
-chezmoi init --apply --verbose https://github.com/Wred/dotfiles.git
+chezmoi init --apply --verbose git@github.com:Wred/dotfiles.git
 ```
 
 ## Mac
