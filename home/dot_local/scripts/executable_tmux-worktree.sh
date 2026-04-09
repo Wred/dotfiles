@@ -34,8 +34,7 @@ while true; do
 	match=${selected_line%%$'\t'*}
 
 	if [[ $key == "ctrl-x" && -n $match ]]; then
-		branch=${selected_line#*$'\t'}
-		gwtrm "$branch"
+		gwtrm "$match"
 		continue
 	fi
 	break

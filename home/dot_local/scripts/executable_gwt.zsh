@@ -44,14 +44,23 @@ gwtrm() {
     shift
   fi
 
-  local branch=${${1// /-}:l}
-  if [[ -z $branch ]]; then
-    echo "Usage: gwtrm [-f] <branch-name>"
+  local arg=$1
+  if [[ -z $arg ]]; then
+    echo "Usage: gwtrm [-f] <path-or-branch>"
     return 1
   fi
 
-  local main_tree=$(git worktree list | head -1 | awk '{print $1}')
-  local dir="$(dirname $main_tree)/$(basename $main_tree)-$branch"
+  local dir branch
+  if [[ -d $arg ]]; then
+    # Argument is a worktree path — use it directly and look up the branch
+    dir=$arg
+    branch=$(git worktree list | awk -v d="$dir" '$1 == d { gsub(/[\[\]]/, "", $3); print $3 }')
+  else
+    # Argument is a branch name — reconstruct the path
+    branch=${${arg// /-}:l}
+    local main_tree=$(git worktree list | head -1 | awk '{print $1}')
+    dir="$(dirname $main_tree)/$(basename $main_tree)-$branch"
+  fi
 
   if [[ -d $dir ]]; then
     if [[ $force != true ]]; then
