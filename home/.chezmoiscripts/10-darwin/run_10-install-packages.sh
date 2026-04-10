@@ -31,6 +31,7 @@ formulae=(
 	packer
 	pinentry-mac
 	pkg-config
+	pnpm
 	poppler
 	pulumi
 	python3
@@ -72,3 +73,6 @@ brew upgrade
 brew install ${formulae[@]}
 brew install --cask ${casks[@]}
 
+# Configure pnpm global bin dir to match other platforms
+mkdir -p ~/.local/share/pnpm
+pnpm config set global-bin-dir ~/.local/share/pnpm
