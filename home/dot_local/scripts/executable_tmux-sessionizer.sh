@@ -18,13 +18,26 @@ fi
 selected_name=$(basename "$selected" | tr . _)
 tmux_running=$(pgrep tmux)
 
+is_git_repo() { git -C "$1" rev-parse --is-inside-work-tree &>/dev/null }
+
+new_session() {
+	local name="$1" dir="$2"
+	if is_git_repo "$dir"; then
+		tmux new-session -ds "$name" -c "$dir" "nvim .; exec zsh"
+		tmux split-window -t "$name" -h -p 40 -c "$dir" "claude --continue || claude; exec zsh"
+	else
+		tmux new-session -ds "$name" -c "$dir"
+	fi
+}
+
 if [[ -z $TMUX ]] && [[ -z $tmux_running ]]; then
-	tmux new-session -s $selected_name -c $selected
+	new_session "$selected_name" "$selected"
+	tmux attach-session -t $selected_name
 	exit 0
 fi
 
 if ! tmux has-session -t=$selected_name 2> /dev/null; then
-	tmux new-session -ds $selected_name -c $selected
+	new_session "$selected_name" "$selected"
 fi
 
 tmux switch-client -t $selected_name
