@@ -23,8 +23,8 @@ is_git_repo() { git -C "$1" rev-parse --is-inside-work-tree &>/dev/null }
 new_session() {
 	local name="$1" dir="$2"
 	if is_git_repo "$dir"; then
-		tmux new-session -ds "$name" -c "$dir" "nvim .; exec zsh"
-		tmux split-window -t "$name" -h -p 40 -c "$dir" "claude --continue || claude; exec zsh"
+		tmux new-session -ds "$name" -c "$dir" "zsh -ic 'nvim'"
+		tmux split-window -t "$name" -h -p 40 -c "$dir" "zsh -ic 'claude --continue || claude'"
 	else
 		tmux new-session -ds "$name" -c "$dir"
 	fi
