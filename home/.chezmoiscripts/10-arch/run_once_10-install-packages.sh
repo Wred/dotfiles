@@ -4,6 +4,7 @@ packages=(
 	gcc
 	base-devel
 	git
+	papirus-icon-theme
 	curl
 	vim
 	neovim
@@ -27,6 +28,8 @@ packages=(
 	hyprland
 	hyprpaper
 	hyprpolkitagent
+	xdg-desktop-portal-hyprland
+	xdg-desktop-portal-gtk
 	waybar
 	wofi
 	wl-clipboard
@@ -52,8 +55,10 @@ packages=(
 )
 
 aur=(
+	catppuccin-gtk-theme-mocha
 	direnv
 	sddm-sugar-candy-git
+	xdg-user-dirs
 	visual-studio-code-bin
 	spotify
 	google-chrome
