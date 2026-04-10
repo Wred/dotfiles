@@ -25,7 +25,21 @@ while true; do
 		fi
 	done)
 
-	result=$(echo "$worktree_list" | fzf --ansi --delimiter=$'\t' --with-nth=2 --print-query \
+	# Build list of branches already checked out in worktrees (for dedup)
+	checked_out_branches=$(git worktree list --porcelain | awk '/^branch refs\/heads\// { sub("refs/heads/", ""); print }')
+
+	# Build remote branch list (cyan), excluding branches that already have a worktree
+	remote_list=$(git branch -r --no-color 2>/dev/null | sed 's/^[* ]*//' | grep -v 'HEAD' | while read -r ref; do
+		local_name=${ref#origin/}
+		if echo "$checked_out_branches" | grep -qxF "$local_name"; then
+			continue
+		fi
+		echo "remote:${local_name}"$'\t'$'\033[36m'"${ref}"$'\033[0m'
+	done)
+
+	combined=$(printf '%s\n%s' "$worktree_list" "$remote_list" | sed '/^$/d')
+
+	result=$(echo "$combined" | fzf --ansi --delimiter=$'\t' --with-nth=2 --print-query \
 		--header "ctrl-x: delete worktree" \
 		--expect "ctrl-x")
 	query=$(echo "$result" | sed -n '1p')
@@ -34,13 +48,28 @@ while true; do
 	match=${selected_line%%$'\t'*}
 
 	if [[ $key == "ctrl-x" && -n $match ]]; then
+		if [[ $match == remote:* ]]; then
+			echo "Cannot delete a remote branch reference."
+			continue
+		fi
 		gwtrm "$match"
 		continue
 	fi
 	break
 done
 
-if [[ -n $match ]]; then
+if [[ $match == remote:* ]]; then
+	# User selected a remote branch — create a worktree from it
+	local remote_branch=${match#remote:}
+	gwta "$remote_branch"
+
+	local sanitized=${${remote_branch// /-}:l}
+	selected=$(git worktree list | grep -F "$sanitized" | awk '{print $1}')
+	if [[ -z $selected ]]; then
+		echo "Error: Failed to find newly created worktree"
+		exit 1
+	fi
+elif [[ -n $match ]]; then
 	# User selected an existing worktree
 	selected="$match"
 elif [[ -n $query ]]; then

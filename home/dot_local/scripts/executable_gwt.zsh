@@ -8,6 +8,7 @@ gwta() {
   fi
 
   local branch=${${1// /-}:l}
+  branch=${branch#origin/}
   if [[ -z $branch ]]; then
     echo "Usage: gwta <branch-name>"
     return 1
@@ -19,6 +20,8 @@ gwta() {
 
   if git show-ref --verify --quiet "refs/heads/$branch"; then
     git worktree add "$dir" "$branch"
+  elif git show-ref --verify --quiet "refs/remotes/origin/$branch"; then
+    git worktree add "$dir" -b "$branch" "origin/$branch"
   else
     git worktree add "$dir" -b "$branch"
   fi
