@@ -104,8 +104,8 @@ issue_title=$(echo "$issue_json" | jq -r '.title')
 # Example: "Add shellcheck linting" (#3) -> "add-shellcheck-linting-issue-3".
 # Pure zsh parameter expansion — no external pipeline that can silently
 # produce an empty string on an exotic title.
-local lower_title=${issue_title:l}
-local slug=${lower_title//[^a-z0-9]/-}
+lower_title=${issue_title:l}
+slug=${lower_title//[^a-z0-9]/-}
 # Collapse runs of dashes
 while [[ $slug == *--* ]]; do
 	slug=${slug//--/-}
@@ -140,7 +140,7 @@ else
 	gwta "$branch"
 
 	# Resolve the new worktree path the same way tmux-worktree.sh does.
-	local sanitized=${${branch// /-}:l}
+	sanitized=${${branch// /-}:l}
 	selected=$(git worktree list | grep -F "$sanitized" | awk '{print $1}')
 	if [[ -z $selected ]]; then
 		echo "Error: Failed to find newly created worktree"
