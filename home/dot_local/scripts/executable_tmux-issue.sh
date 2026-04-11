@@ -48,6 +48,31 @@ formatted=$(echo "$issues_json" | jq -r '
   "\(.number)\t#\(.number)  \(.title)\($labels_col)\($assignees_col)"
 ')
 
+# Highlight issues that already have an active tmux session (via their worktree)
+active_issue_nums=()
+while IFS= read -r wt_line; do
+	wt_path=${wt_line%% *}
+	branch_raw=${wt_line##* }
+	branch=${branch_raw//[\[\]]/}
+	if [[ $branch =~ -issue-([0-9]+)$ ]]; then
+		num=$match[1]
+		session=$(basename "$wt_path" | tr . _)
+		tmux has-session -t="$session" 2>/dev/null && active_issue_nums+=($num)
+	fi
+done < <(git worktree list)
+
+if (( ${#active_issue_nums} > 0 )); then
+	formatted=$(echo "$formatted" | while IFS= read -r line; do
+		num=${line%%$'\t'*}
+		if (( ${active_issue_nums[(Ie)$num]} )); then
+			display=${line#*$'\t'}
+			printf '%s\t\033[33m%s\033[0m\n' "$num" "$display"
+		else
+			printf '%s\n' "$line"
+		fi
+	done)
+fi
+
 result=$(echo "$formatted" | fzf --ansi --delimiter=$'\t' --with-nth=2 \
 	--header "enter: interactive · ctrl-a: autonomous" \
 	--expect "ctrl-a")

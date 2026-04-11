@@ -106,7 +106,7 @@ tmux_running=$(pgrep tmux)
 new_session() {
 	local name="$1" dir="$2"
 	tmux new-session -ds "$name" -c "$dir" "zsh -ic 'nvim'"
-	tmux split-window -t "$name" -h -p 40 -c "$dir" "zsh -ic 'claude --continue || claude'"
+	tmux split-window -t "$name" -h -c "$dir" "zsh -ic 'claude --continue || claude'"
 }
 
 if [[ -z $TMUX ]] && [[ -z $tmux_running ]]; then

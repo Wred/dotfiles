@@ -41,7 +41,7 @@ new_session() {
 add_claude_pane() {
 	local name="$1" dir="$2"
 	is_git_repo "$dir" || return
-	tmux split-window -t "$name" -h -p 40 -c "$dir" "zsh -ic 'claude --continue || claude'"
+	tmux split-window -t "$name" -h -c "$dir" "zsh -ic 'claude --continue || claude'"
 	tmux select-pane -t "$name" -L
 }
 
