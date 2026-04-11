@@ -27,6 +27,8 @@ packages=(
 	lazygit
 	keyd
 	hyprland
+	hypridle
+	hyprlock
 	hyprpaper
 	hyprpolkitagent
 	xdg-desktop-portal-hyprland
