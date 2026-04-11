@@ -163,9 +163,6 @@ if [[ $is_new_worktree == 1 ]]; then
 	fi
 fi
 
-# Remove leftover context file from the old file-based approach
-[[ -f "${selected}/.claude-issue.md" ]] && rm "${selected}/.claude-issue.md"
-
 selected_name=$(basename "$selected" | tr . _)
 tmux_running=$(pgrep tmux)
 
