@@ -29,9 +29,16 @@ You are decomposing a larger effort into GitHub issues that can be worked in par
 
 4. **Hard decoupling rule**: no issue may reference another by number, and no issue may be blocked on another. Before creating, scan each body for `depends on #`, `blocks #`, `blocked by`, `after #`, `requires #` and reject/rewrite matches. If you cannot decouple, STOP and tell the user — restructure or fall back to a single issue.
 
-5. **Only after the user approves**, create the issues:
+5. **Only after the user approves**, create the issues. Write each body to
+   a temp file and use `--body-file` to avoid shell interpretation of
+   backticks, `$variables`, and other special characters in the body:
    ```
-   gh issue create --title "..." --body "..."
+   tmp=$(mktemp)
+   cat >"$tmp" <<'BODY'
+   <issue body here>
+   BODY
+   gh issue create --title "..." --body-file "$tmp"
+   rm "$tmp"
    ```
    Print the created URLs.
 
