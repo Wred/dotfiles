@@ -73,6 +73,7 @@ aur=(
 	obsidian
 	signal-desktop
 	standardnotes-bin
+	cursor-bin
 )
 
 sudo pacman -Syu --noconfirm
