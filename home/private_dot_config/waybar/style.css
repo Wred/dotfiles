@@ -42,7 +42,8 @@ window#waybar {
 
 #cpu,
 #memory,
-#disk {
+#disk,
+#pulseaudio {
     padding: 0 10px;
     color: #bac2de;
 }

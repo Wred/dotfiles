@@ -5,6 +5,7 @@ packages=(
 	base-devel
 	git
 	papirus-icon-theme
+	ttf-jetbrains-mono-nerd
 	curl
 	vim
 	neovim
@@ -33,6 +34,7 @@ packages=(
 	waybar
 	wofi
 	wl-clipboard
+	pavucontrol
 	wtype
 	krita
 	skanlite

@@ -2,9 +2,9 @@
     "layer": "top",
     "position": "top",
     "height": 30,
-    "modules-left": ["hyprland/workspaces"],
-    "modules-center": ["hyprland/window"],
-    "modules-right": ["cpu", "memory", "tray", "clock"],
+    "modules-left": ["hyprland/workspaces", "hyprland/window"],
+    "modules-center": [],
+    "modules-right": ["pulseaudio", "cpu", "memory", "tray", "clock"],
 
     "hyprland/workspaces": {
         "format": "{id}",
@@ -20,14 +20,22 @@
     },
 
     "cpu": {
-        "format": "cpu {icon} {usage}%",
-        "format-icons": ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"],
+        "format": "{usage}% 󰍛",
         "interval": 1
     },
 
     "memory": {
-        "format": "mem {used}G/{total}G",
+        "format": "{percentage}% 󰍜",
         "interval": 1
+    },
+
+    "pulseaudio": {
+        "format": "{volume}% 󰕾",
+        "format-muted": "muted 󰖁",
+        "format-icons": {
+            "default": ["", "", ""]
+        },
+        "on-click": "pavucontrol"
     },
 
     "tray": {
