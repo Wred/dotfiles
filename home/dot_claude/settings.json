@@ -5,16 +5,22 @@
       "Write",
       "Bash(git pull:*)",
       "Bash(git commit:*)",
+      "Bash(git push:*)",
       "Bash(gh repo view:*)",
       "Bash(gh repo list:*)",
       "Bash(gh issue list:*)",
       "Bash(gh issue view:*)",
       "Bash(gh issue status:*)",
+      "Bash(gh issue create:*)",
+      "Bash(gh issue edit:*)",
+      "Bash(gh issue comment:*)",
+      "Bash(gh issue close:*)",
       "Bash(gh pr list:*)",
       "Bash(gh pr view:*)",
       "Bash(gh pr status:*)",
       "Bash(gh pr checks:*)",
       "Bash(gh pr diff:*)",
+      "Bash(gh pr create:*)",
       "Bash(gh run list:*)",
       "Bash(gh run view:*)",
       "Bash(gh run watch:*)",
@@ -98,7 +104,6 @@
       "Bash(helm diff:*)"
     ],
     "ask": [
-      "Bash(git push:*)",
       "Bash(gh api:*)",
       "Bash(xargs:*)",
       "Bash(cargo run:*)",
@@ -127,6 +132,7 @@
       "Bash(uv publish:*)"
     ]
   },
+  "model": "opus",
   "enabledPlugins": {
     "pyright-lsp@claude-plugins-official": true,
     "rust-analyzer-lsp@claude-plugins-official": true

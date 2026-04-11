@@ -13,20 +13,25 @@ source "$(dirname "$0")/gwt.zsh"
 # ctrl-x: delete worktree, enter: select worktree
 while true; do
 	worktree_list=$(git worktree list | while read -r line; do
-		path=${line%% *}
-		folder=${path:t}
+		# NB: do NOT use the variable name `path` here — in zsh it is a
+		# special array tied to $PATH, so `path=...` silently wipes $PATH
+		# and every subsequent command in the loop (tmux, etc.) vanishes.
+		wt_path=${line%% *}
+		folder=${wt_path:t}
 		session=${${folder}//./_}
 		branch_field=${line##* }
 		branch=${branch_field//[\[\]]/}
-		if /opt/homebrew/bin/tmux has-session -t="$session" 2>/dev/null; then
-			echo "${path}"$'\t'$'\033[33m'"${branch}"$'\033[0m'
+		if tmux has-session -t="$session" 2>/dev/null; then
+			echo "${wt_path}"$'\t'$'\033[33m'"${branch}"$'\033[0m'
 		else
-			echo "${path}"$'\t'"${branch}"
+			echo "${wt_path}"$'\t'"${branch}"
 		fi
 	done)
 
-	# Build list of branches already checked out in worktrees (for dedup)
-	checked_out_branches=$(git worktree list --porcelain | awk '/^branch refs\/heads\// { sub("refs/heads/", ""); print }')
+	# Build list of branches already checked out in worktrees (for dedup).
+	# Porcelain lines look like `branch refs/heads/<name>`; we need just <name>
+	# so the later `grep -qxF` whole-line match actually hits.
+	checked_out_branches=$(git worktree list --porcelain | awk '/^branch refs\/heads\// { sub("^branch refs/heads/", ""); print }')
 
 	# Build remote branch list (cyan), excluding branches that already have a worktree
 	remote_list=$(git branch -r --no-color 2>/dev/null | sed 's/^[* ]*//' | grep -v 'HEAD' | while read -r ref; do
