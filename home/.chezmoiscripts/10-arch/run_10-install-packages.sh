@@ -56,6 +56,9 @@ packages=(
 	yazi
 	yq
 	zoxide
+	nvidia-utils
+	cuda
+	ollama-cuda
 )
 
 aur=(
