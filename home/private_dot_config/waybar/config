@@ -35,7 +35,8 @@
         "format-icons": {
             "default": ["", "", ""]
         },
-        "on-click": "pavucontrol"
+        "on-click": "~/.local/scripts/audio-sink-switch.sh",
+        "on-click-right": "pavucontrol"
     },
 
     "tray": {
