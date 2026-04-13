@@ -90,14 +90,11 @@ gwtrm() {
       git worktree remove "$dir"
     fi
     echo "Worktree removed: $dir:t"
-  else
-    echo "Error: Worktree not found at $dir"
-    return 1
   fi
 
   git worktree prune
 
-  if git show-ref --verify --quiet "refs/heads/$branch"; then
+  if [[ -n $branch ]] && git show-ref --verify --quiet "refs/heads/$branch"; then
     git branch -D "$branch"
     echo "Branch deleted: $branch"
   fi
