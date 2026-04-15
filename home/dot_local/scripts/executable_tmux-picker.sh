@@ -13,6 +13,13 @@ source "$(dirname "$SELF")/gwt.zsh"
 
 # ─── List generators (called by fzf reload) ─────────────────────────
 
+_list_sessions() {
+	tmux list-sessions -F '#{session_name}' 2>/dev/null \
+		| while IFS= read -r session_name; do
+			printf 'session:%s\t\033[33m%s\033[0m\n' "$session_name" "$session_name"
+		done
+}
+
 _list_dirs() {
 	local directories=${TMUX_SESSIONIZER_SEARCH_DIRS:-"$HOME/work"}
 	local extra_dirs=${TMUX_SESSIONIZER_EXTRA_DIRS:-"$HOME/.local/share/chezmoi"}
@@ -148,12 +155,13 @@ _tab_header() {
 	local reset=$'\033[0m'
 	local on=$'\033[1;7m'
 	local off=$'\033[2m'
-	local d w i p
+	local s d w i p
+	[[ $active == sessions ]]  && s=$on || s=$off
 	[[ $active == dirs ]]      && d=$on || d=$off
 	[[ $active == worktrees ]] && w=$on || w=$off
 	[[ $active == issues ]]    && i=$on || i=$off
 	[[ $active == prs ]]       && p=$on || p=$off
-	local tabs="${d} f:Dirs ${reset}  ${w} w:Worktrees ${reset}  ${i} i:Issues ${reset}  ${p} p:PRs ${reset}"
+	local tabs="${s} s:Sessions ${reset}  ${d} f:Dirs ${reset}  ${w} w:Worktrees ${reset}  ${i} i:Issues ${reset}  ${p} p:PRs ${reset}"
 	local hints
 	case $active in
 		worktrees) hints="ctrl-x: delete · ctrl-h/l: switch" ;;
@@ -169,6 +177,7 @@ _tab_header() {
 _switch_tab() {
 	local tab=$1
 	case $tab in
+		sessions)  echo "change-prompt(Sessions> )+reload($TMUX_PICKER --list-sessions)+transform-header($TMUX_PICKER --tab-header sessions)+clear-query" ;;
 		dirs)      echo "change-prompt(Directories> )+reload($TMUX_PICKER --list-dirs)+transform-header($TMUX_PICKER --tab-header dirs)+clear-query" ;;
 		worktrees) echo "change-prompt(Worktrees> )+reload($TMUX_PICKER --list-worktrees)+transform-header($TMUX_PICKER --tab-header worktrees)+clear-query" ;;
 		issues)    echo "change-prompt(Issues> )+reload-sync($TMUX_PICKER --list-issues)+transform-header($TMUX_PICKER --tab-header issues)+clear-query" ;;
@@ -178,7 +187,8 @@ _switch_tab() {
 
 _cycle_left() {
 	case "$1" in
-		"Directories> ") _switch_tab prs ;;
+		"Sessions> ")    _switch_tab prs ;;
+		"Directories> ") _switch_tab sessions ;;
 		"Worktrees> ")   _switch_tab dirs ;;
 		"Issues> ")      _switch_tab worktrees ;;
 		"PRs> ")         _switch_tab issues ;;
@@ -187,6 +197,7 @@ _cycle_left() {
 
 _cycle_right() {
 	case "$1" in
+		"Sessions> ")    _switch_tab dirs ;;
 		"Directories> ") _switch_tab worktrees ;;
 		"Worktrees> ")   _switch_tab issues ;;
 		"Issues> ")      _switch_tab prs ;;
@@ -196,6 +207,7 @@ _cycle_right() {
 
 _on_enter() {
 	case "$1" in
+		"Sessions> ")    echo "become(printf '%s\n%s' select {1})" ;;
 		"Directories> ") echo "become(printf '%s\n%s' select {1})" ;;
 		"Worktrees> ")   echo "become(printf '%s\n%s\n%s' select {1} {q})" ;;
 		"Issues> ")      echo "become(printf '%s\n%s' interactive {1})" ;;
@@ -225,6 +237,17 @@ _delete_wt() {
 }
 
 # ─── Session handlers ───────────────────────────────────────────────
+
+_switch_session() {
+	local name="$1"
+	[[ -z $name ]] && exit 0
+	local tmux_running=$(pgrep tmux)
+	if [[ -z $TMUX ]] && [[ -z $tmux_running ]]; then
+		tmux attach-session -t "$name"
+	else
+		tmux switch-client -t "$name"
+	fi
+}
 
 _open_session() {
 	local selected="$1"
@@ -373,6 +396,7 @@ _open_issue() {
 # ─── Subcommand dispatch ────────────────────────────────────────────
 
 case "${1:-}" in
+	--list-sessions)  _list_sessions;              exit ;;
 	--list-dirs)      _list_dirs;                  exit ;;
 	--list-worktrees) _list_worktrees;             exit ;;
 	--list-issues)    _list_issues;                exit ;;
@@ -389,28 +413,32 @@ esac
 
 # ─── Main ───────────────────────────────────────────────────────────
 
+_common_binds=(
+	--bind 'ctrl-s:transform:$TMUX_PICKER --switch-tab sessions'
+	--bind 'ctrl-f:transform:$TMUX_PICKER --switch-tab dirs'
+	--bind 'ctrl-h:transform:$TMUX_PICKER --cycle-left "$FZF_PROMPT"'
+	--bind 'ctrl-l:transform:$TMUX_PICKER --cycle-right "$FZF_PROMPT"'
+	--bind 'enter:transform:$TMUX_PICKER --on-enter "$FZF_PROMPT"'
+)
+
 if git rev-parse --git-dir &>/dev/null; then
-	# Tabbed mode: dirs + worktrees + issues
-	output=$("$SELF" --list-dirs | fzf --ansi \
+	output=$("$SELF" --list-sessions | fzf --ansi \
 		--delimiter=$'\t' --with-nth=2 \
-		--prompt 'Directories> ' \
-		--header "$("$SELF" --tab-header dirs)" \
-		--bind 'ctrl-f:transform:$TMUX_PICKER --switch-tab dirs' \
+		--prompt 'Sessions> ' \
+		--header "$("$SELF" --tab-header sessions)" \
+		"${_common_binds[@]}" \
 		--bind 'ctrl-w:transform:$TMUX_PICKER --switch-tab worktrees' \
 		--bind 'ctrl-i:transform:$TMUX_PICKER --switch-tab issues' \
 		--bind 'ctrl-p:transform:$TMUX_PICKER --switch-tab prs' \
-		--bind 'ctrl-h:transform:$TMUX_PICKER --cycle-left "$FZF_PROMPT"' \
-		--bind 'ctrl-l:transform:$TMUX_PICKER --cycle-right "$FZF_PROMPT"' \
 		--bind 'ctrl-x:transform:$TMUX_PICKER --on-ctrl-x "$FZF_PROMPT"' \
 		--bind 'ctrl-a:transform:$TMUX_PICKER --on-ctrl-a "$FZF_PROMPT"' \
-		--bind 'enter:transform:$TMUX_PICKER --on-enter "$FZF_PROMPT"' \
 	)
 else
-	# Non-git: directories only, no tabs
-	output=$("$SELF" --list-dirs | fzf --ansi \
+	output=$("$SELF" --list-sessions | fzf --ansi \
 		--delimiter=$'\t' --with-nth=2 \
-		--prompt '> ' \
-		--bind 'enter:become(printf select\\n{1})' \
+		--prompt 'Sessions> ' \
+		--header "$("$SELF" --tab-header sessions)" \
+		"${_common_binds[@]}" \
 	)
 fi
 
@@ -425,10 +453,11 @@ selected=$(echo "$output" | sed -n '2p')
 query=$(echo "$output" | sed -n '3p')
 
 case "$selected" in
-	dir:*)    _open_session "${selected#dir:}" ;;
-	wt:*)     _open_session "${selected#wt:}" ;;
-	remote:*) _open_remote "${selected#remote:}" ;;
-	issue:*)  _open_issue "${selected#issue:}" "$mode" ;;
-	pr:*)     _open_pr "${selected#pr:}" ;;
-	"")       [[ -n $query ]] && _create_branch "$query" ;;
+	session:*) _switch_session "${selected#session:}" ;;
+	dir:*)     _open_session "${selected#dir:}" ;;
+	wt:*)      _open_session "${selected#wt:}" ;;
+	remote:*)  _open_remote "${selected#remote:}" ;;
+	issue:*)   _open_issue "${selected#issue:}" "$mode" ;;
+	pr:*)      _open_pr "${selected#pr:}" ;;
+	"")        [[ -n $query ]] && _create_branch "$query" ;;
 esac

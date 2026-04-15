@@ -28,7 +28,7 @@ gwta() {
 
   # Seed .envrc with dev layout and allow it
   if [[ ! -f "$dir/.envrc" ]]; then
-    echo 'source tmux-dev-layout.sh' > "$dir/.envrc"
+    echo 'source $(command -v tmux-dev-layout.sh)' > "$dir/.envrc"
     direnv allow "$dir"
   fi
 

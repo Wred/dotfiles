@@ -8,10 +8,10 @@
 # Intended to be called from .envrc files.
 
 # Must be in tmux
-[[ -z $TMUX ]] && return 0 2>/dev/null || exit 0
+if [[ -z $TMUX ]]; then return 0 2>/dev/null; exit 0; fi
 
 # Idempotency: skip if window already has >1 pane
-(( $(tmux list-panes | wc -l) > 1 )) && return 0 2>/dev/null || exit 0
+if (( $(tmux list-panes 2>/dev/null | wc -l) > 1 )); then return 0 2>/dev/null; exit 0; fi
 
 # Read issue context from tmux session env
 session=$(tmux display-message -p '#S')
