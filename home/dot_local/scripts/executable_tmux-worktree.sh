@@ -103,20 +103,14 @@ fi
 selected_name=$(basename "$selected" | tr . _)
 tmux_running=$(pgrep tmux)
 
-new_session() {
-	local name="$1" dir="$2"
-	tmux new-session -ds "$name" -c "$dir" "zsh -ic 'nvim'"
-	tmux split-window -t "$name" -h -c "$dir" "zsh -ic 'claude --continue || claude'"
-}
-
 if [[ -z $TMUX ]] && [[ -z $tmux_running ]]; then
-	new_session "$selected_name" "$selected"
+	tmux new-session -ds "$selected_name" -c "$selected"
 	tmux attach-session -t "$selected_name"
 	exit 0
 fi
 
 if ! tmux has-session -t="$selected_name" 2>/dev/null; then
-	new_session "$selected_name" "$selected"
+	tmux new-session -ds "$selected_name" -c "$selected"
 fi
 
 tmux switch-client -t "$selected_name"

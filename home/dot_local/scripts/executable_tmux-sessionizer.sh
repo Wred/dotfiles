@@ -27,39 +27,14 @@ fi
 selected_name=$(basename "$selected" | tr . _)
 tmux_running=$(pgrep tmux)
 
-is_git_repo() { git -C "$1" rev-parse --is-inside-work-tree &>/dev/null }
-
-new_session() {
-	local name="$1" dir="$2"
-	if is_git_repo "$dir"; then
-		tmux new-session -ds "$name" -c "$dir" "zsh -ic 'nvim'"
-	else
-		tmux new-session -ds "$name" -c "$dir"
-	fi
-}
-
-add_claude_pane() {
-	local name="$1" dir="$2"
-	is_git_repo "$dir" || return
-	tmux split-window -t "$name" -h -c "$dir" "zsh -ic 'claude --continue || claude'"
-	tmux select-pane -t "$name" -L
-}
-
 if [[ -z $TMUX ]] && [[ -z $tmux_running ]]; then
-	new_session "$selected_name" "$selected"
-	add_claude_pane "$selected_name" "$selected"
+	tmux new-session -ds "$selected_name" -c "$selected"
 	tmux attach-session -t $selected_name
 	exit 0
 fi
 
-newly_created=false
 if ! tmux has-session -t=$selected_name 2> /dev/null; then
-	new_session "$selected_name" "$selected"
-	newly_created=true
+	tmux new-session -ds "$selected_name" -c "$selected"
 fi
 
 tmux switch-client -t $selected_name
-
-if $newly_created; then
-	add_claude_pane "$selected_name" "$selected"
-fi

@@ -1,12 +1,9 @@
 #!/usr/bin/env zsh
 
-# Pick an open GitHub issue and spin up a worktree-backed tmux session
-# for it, with the familiar nvim (left) + claude (right) split.
+# Pick an open GitHub issue and spin up a worktree-backed tmux session for it.
+# Layout is driven by .envrc in the worktree directory.
 #
-# Enter  = interactive mode (claude waits for your direction)
-# Ctrl-A = autonomous mode  (claude works the issue end-to-end to a draft PR)
-#
-# Bound to C-M-i in tmux.conf. Sibling of tmux-worktree.sh.
+# Bound to C-M-p in tmux.conf. Sibling of tmux-worktree.sh.
 
 # Fail if not in a git repo
 if ! git rev-parse --git-dir &>/dev/null; then
@@ -84,7 +81,6 @@ if [[ -z $issue_number ]]; then
 	exit 0
 fi
 
-# Mode selection
 if [[ $key == "ctrl-a" ]]; then
 	mode="autonomous"
 else
@@ -166,27 +162,26 @@ fi
 selected_name=$(basename "$selected" | tr . _)
 tmux_running=$(pgrep tmux)
 
-if [[ $mode == "autonomous" ]]; then
-	claude_prompt="GitHub issue #${issue_number}. Read it with: gh issue view ${issue_number} --json title,body,labels,url. Then work it end-to-end: implement, test, commit on the current branch, push, and open a draft PR with gh pr create --draft. If acceptance criteria are ambiguous or you hit a blocking decision, stop and ask rather than guessing."
-else
-	claude_prompt="GitHub issue #${issue_number}. Read it with: gh issue view ${issue_number} --json title,body,labels,url. Summarize it back to me, then wait for my direction."
-fi
-
-new_session() {
-	local name="$1" dir="$2"
-	tmux new-session -ds "$name" -c "$dir" "zsh -ic 'nvim'"
-	tmux split-window -t "$name" -h -p 40 -c "$dir" \
-		"zsh -ic 'claude ${(q)claude_prompt}'"
+set_issue_env() {
+	tmux set-environment -t "$selected_name" CODING_AGENT_ISSUE "$issue_number"
+	tmux set-environment -t "$selected_name" CODING_AGENT_MODE "$mode"
 }
 
 if [[ -z $TMUX ]] && [[ -z $tmux_running ]]; then
-	new_session "$selected_name" "$selected"
+	tmux new-session -ds "$selected_name" -c "$selected"
+	set_issue_env
 	tmux attach-session -t "$selected_name"
 	exit 0
 fi
 
+newly_created=false
 if ! tmux has-session -t="$selected_name" 2>/dev/null; then
-	new_session "$selected_name" "$selected"
+	tmux new-session -ds "$selected_name" -c "$selected"
+	newly_created=true
 fi
 
 tmux switch-client -t "$selected_name"
+
+if $newly_created; then
+	set_issue_env
+fi
