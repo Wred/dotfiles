@@ -26,6 +26,12 @@ gwta() {
     git worktree add "$dir" -b "$branch"
   fi
 
+  # Seed .envrc with dev layout and allow it
+  if [[ ! -f "$dir/.envrc" ]]; then
+    echo 'source tmux-dev-layout.sh' > "$dir/.envrc"
+    direnv allow "$dir"
+  fi
+
   echo "Worktree created at: $dir"
 }
 

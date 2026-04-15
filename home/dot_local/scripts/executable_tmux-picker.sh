@@ -16,12 +16,11 @@ source "$(dirname "$SELF")/gwt.zsh"
 _list_dirs() {
 	local directories=${TMUX_SESSIONIZER_SEARCH_DIRS:-"$HOME/work"}
 	local extra_dirs=${TMUX_SESSIONIZER_EXTRA_DIRS:-"$HOME/.local/share/chezmoi"}
-	local active_sessions=$(tmux list-sessions -F '#S' 2>/dev/null || true)
+	local active_paths=$(tmux list-sessions -F '#{session_path}' 2>/dev/null || true)
 	{ find $directories -mindepth 2 -maxdepth 2 -type d; echo $extra_dirs; } \
 		| while IFS= read -r dir; do
-			local name=$(basename "$dir" | tr . _)
 			local label="${dir:h:t}/${dir:t}"
-			if echo "$active_sessions" | grep -qx "$name" 2>/dev/null; then
+			if echo "$active_paths" | grep -qxF "$dir" 2>/dev/null; then
 				printf 'dir:%s\t\033[33m%s\033[0m\n' "$dir" "$label"
 			else
 				printf 'dir:%s\t%s\n' "$dir" "$label"
@@ -30,13 +29,13 @@ _list_dirs() {
 }
 
 _list_worktrees() {
+	local active_paths=$(tmux list-sessions -F '#{session_path}' 2>/dev/null || true)
 	git worktree list | while read -r line; do
+		[[ $line == *prunable\] ]] && continue
 		local wt_path=${line%% *}
-		local folder=${wt_path:t}
-		local session=${${folder}//./_}
 		local branch_field=${line##* }
 		local branch=${branch_field//[\[\]]/}
-		if tmux has-session -t="$session" 2>/dev/null; then
+		if echo "$active_paths" | grep -qxF "$wt_path" 2>/dev/null; then
 			printf 'wt:%s\t\033[33m%s\033[0m\n' "$wt_path" "$branch"
 		else
 			printf 'wt:%s\t%s\n' "$wt_path" "$branch"
@@ -66,6 +65,7 @@ _list_issues() {
 		return
 	fi
 
+	local active_paths=$(tmux list-sessions -F '#{session_path}' 2>/dev/null || true)
 	local -a active_issue_nums=()
 	while IFS= read -r wt_line; do
 		local wt_path=${wt_line%% *}
@@ -73,8 +73,7 @@ _list_issues() {
 		local branch=${branch_raw//[\[\]]/}
 		if [[ $branch =~ -issue-([0-9]+)$ ]]; then
 			local num=$match[1]
-			local session=$(basename "$wt_path" | tr . _)
-			tmux has-session -t="$session" 2>/dev/null && active_issue_nums+=($num)
+			echo "$active_paths" | grep -qxF "$wt_path" 2>/dev/null && active_issue_nums+=($num)
 		fi
 	done < <(git worktree list)
 
@@ -111,14 +110,14 @@ _list_prs() {
 		return
 	fi
 
-	# Build set of branches with active tmux sessions (via worktrees)
+	# Build set of branches with active tmux sessions (via worktree paths)
+	local active_paths=$(tmux list-sessions -F '#{session_path}' 2>/dev/null || true)
 	local -A active_branches=()
 	while IFS= read -r wt_line; do
 		local wt_path=${wt_line%% *}
 		local branch_raw=${wt_line##* }
 		local branch=${branch_raw//[\[\]]/}
-		local session=$(basename "$wt_path" | tr . _)
-		tmux has-session -t="$session" 2>/dev/null && active_branches[$branch]=1
+		echo "$active_paths" | grep -qxF "$wt_path" 2>/dev/null && active_branches[$branch]=1
 	done < <(git worktree list)
 
 	echo "$prs_json" | jq -r '
@@ -343,15 +342,6 @@ _open_issue() {
 			exit 1
 		fi
 		is_new_worktree=1
-	fi
-
-	# Assign and comment on first pickup
-	if [[ $is_new_worktree == 1 ]]; then
-		gh issue edit "$issue_number" --add-assignee @me >/dev/null 2>&1 || \
-			echo "Warning: failed to assign issue #$issue_number to @me (continuing)"
-		gh issue comment "$issue_number" \
-			--body "Started work on this in branch \`${branch}\`." >/dev/null 2>&1 || \
-			echo "Warning: failed to post branch comment on issue #$issue_number (continuing)"
 	fi
 
 	local selected_name=$(basename "$selected" | tr . _)
