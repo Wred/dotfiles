@@ -250,19 +250,30 @@ _switch_session() {
 }
 
 _open_session() {
-	local selected="$1"
+	local selected="$1" layout="${2:-false}"
 	[[ -z $selected ]] && exit 0
 	local selected_name=$(basename "$selected" | tr . _)
 	local tmux_running=$(pgrep tmux)
+	local newly_created=false
 	if [[ -z $TMUX ]] && [[ -z $tmux_running ]]; then
 		tmux new-session -ds "$selected_name" -c "$selected"
+		newly_created=true
 		tmux attach-session -t "$selected_name"
+		if $newly_created && $layout; then
+			sleep 0.5
+			tmux send-keys -t "$selected_name" 'tmux-dev-layout.sh' Enter
+		fi
 		exit 0
 	fi
 	if ! tmux has-session -t="$selected_name" 2>/dev/null; then
 		tmux new-session -ds "$selected_name" -c "$selected"
+		newly_created=true
 	fi
 	tmux switch-client -t "$selected_name"
+	if $newly_created && $layout; then
+		sleep 0.5
+		tmux send-keys -t "$selected_name" 'tmux-dev-layout.sh' Enter
+	fi
 }
 
 _open_remote() {
@@ -274,7 +285,7 @@ _open_remote() {
 		echo "Error: Failed to find newly created worktree"
 		exit 1
 	fi
-	_open_session "$selected"
+	_open_session "$selected" true
 }
 
 _create_branch() {
@@ -293,7 +304,7 @@ _create_branch() {
 		echo "Error: Failed to find newly created worktree"
 		exit 1
 	fi
-	_open_session "$selected"
+	_open_session "$selected" true
 }
 
 _open_pr() {
@@ -309,7 +320,7 @@ _open_pr() {
 	done)
 
 	if [[ -n $existing ]]; then
-		_open_session "$existing"
+		_open_session "$existing" true
 	else
 		gwta "$branch"
 		local sanitized=${${branch// /-}:l}
@@ -318,7 +329,7 @@ _open_pr() {
 			echo "Error: Failed to find newly created worktree"
 			exit 1
 		fi
-		_open_session "$selected"
+		_open_session "$selected" true
 	fi
 }
 
@@ -379,6 +390,7 @@ _open_issue() {
 		tmux new-session -ds "$selected_name" -c "$selected"
 		_set_issue_env
 		tmux attach-session -t "$selected_name"
+		tmux send-keys -t "$selected_name" 'tmux-dev-layout.sh' Enter
 		exit 0
 	fi
 
@@ -390,6 +402,8 @@ _open_issue() {
 	tmux switch-client -t "$selected_name"
 	if $newly_created; then
 		_set_issue_env
+		sleep 0.5
+		tmux send-keys -t "$selected_name" 'tmux-dev-layout.sh' Enter
 	fi
 }
 
@@ -455,7 +469,7 @@ query=$(echo "$output" | sed -n '3p')
 case "$selected" in
 	session:*) _switch_session "${selected#session:}" ;;
 	dir:*)     _open_session "${selected#dir:}" ;;
-	wt:*)      _open_session "${selected#wt:}" ;;
+	wt:*)      _open_session "${selected#wt:}" true ;;
 	remote:*)  _open_remote "${selected#remote:}" ;;
 	issue:*)   _open_issue "${selected#issue:}" "$mode" ;;
 	pr:*)      _open_pr "${selected#pr:}" ;;
