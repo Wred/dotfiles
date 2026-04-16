@@ -3,8 +3,8 @@
     "position": "top",
     "height": 30,
     "modules-left": ["hyprland/workspaces", "hyprland/window"],
-    "modules-center": [],
-    "modules-right": ["pulseaudio", "cpu", "memory", "tray", "clock"],
+    "modules-center": ["clock"],
+    "modules-right": ["pulseaudio", "cpu", "memory", "tray"],
 
     "hyprland/workspaces": {
         "format": "{id}",
