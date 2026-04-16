@@ -29,9 +29,9 @@ if [[ -n $issue ]]; then
 	fi
 fi
 
-# Split: claude on the right (40% width)
+# Split: claude on the right (50% width)
 # Use direnv exec to inherit .envrc environment (e.g. KUBECONFIG)
-tmux split-window -h -p 40 "direnv exec . zsh -ic '${agent_cmd}'"
+tmux split-window -h -p 50 "direnv exec . zsh -ic '${agent_cmd}'"
 
 # Start nvim in this pane (the left/original pane where the script is running)
 nvim

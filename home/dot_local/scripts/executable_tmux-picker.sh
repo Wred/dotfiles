@@ -11,13 +11,40 @@ export TMUX_PICKER="$SELF"
 
 source "$(dirname "$SELF")/gwt.zsh"
 
+# ─── Directory history ───────────────────────────────────────────────
+
+_HIST_FILE="${XDG_CACHE_HOME:-$HOME/.cache}/tmux/sessionizer-history"
+mkdir -p "${_HIST_FILE:h}"
+
+_record_dir_history() {
+	local path="$1"
+	local -a lines=("$path")
+	if [[ -f $_HIST_FILE ]]; then
+		while IFS= read -r line; do
+			[[ $line == $path ]] && continue
+			lines+=("$line")
+			(( ${#lines} >= 10 )) && break
+		done < "$_HIST_FILE"
+	fi
+	printf '%s\n' "${lines[@]}" >| "$_HIST_FILE"
+}
+
 # ─── List generators (called by fzf reload) ─────────────────────────
 
 _list_sessions() {
+	local active_paths=$(tmux list-sessions -F '#{session_path}' 2>/dev/null || true)
 	tmux list-sessions -F '#{session_name}' 2>/dev/null \
 		| while IFS= read -r session_name; do
 			printf 'session:%s\t\033[33m%s\033[0m\n' "$session_name" "$session_name"
 		done
+	if [[ -f $_HIST_FILE ]]; then
+		while IFS= read -r dir; do
+			[[ -d $dir ]] || continue
+			echo "$active_paths" | grep -qxF "$dir" && continue
+			local label="${dir:h:t}/${dir:t}"
+			printf 'dir:%s\t%s\n' "$dir" "$label"
+		done < "$_HIST_FILE"
+	fi
 }
 
 _list_dirs() {
@@ -250,16 +277,19 @@ _switch_session() {
 }
 
 _open_session() {
-	local selected="$1" layout="${2:-false}"
+	local selected="$1"
 	[[ -z $selected ]] && exit 0
+	_record_dir_history "$selected"
 	local selected_name=$(basename "$selected" | tr . _)
 	local tmux_running=$(pgrep tmux)
+	local is_git=false
+	git -C "$selected" rev-parse --git-dir &>/dev/null && is_git=true
 	local newly_created=false
 	if [[ -z $TMUX ]] && [[ -z $tmux_running ]]; then
 		tmux new-session -ds "$selected_name" -c "$selected"
 		newly_created=true
 		tmux attach-session -t "$selected_name"
-		if $newly_created && $layout; then
+		if $newly_created && $is_git; then
 			sleep 0.5
 			tmux send-keys -t "$selected_name" 'tmux-dev-layout.sh' Enter
 		fi
@@ -270,7 +300,7 @@ _open_session() {
 		newly_created=true
 	fi
 	tmux switch-client -t "$selected_name"
-	if $newly_created && $layout; then
+	if $newly_created && $is_git; then
 		sleep 0.5
 		tmux send-keys -t "$selected_name" 'tmux-dev-layout.sh' Enter
 	fi
@@ -285,7 +315,7 @@ _open_remote() {
 		echo "Error: Failed to find newly created worktree"
 		exit 1
 	fi
-	_open_session "$selected" true
+	_open_session "$selected"
 }
 
 _create_branch() {
@@ -304,7 +334,7 @@ _create_branch() {
 		echo "Error: Failed to find newly created worktree"
 		exit 1
 	fi
-	_open_session "$selected" true
+	_open_session "$selected"
 }
 
 _open_pr() {
@@ -320,7 +350,7 @@ _open_pr() {
 	done)
 
 	if [[ -n $existing ]]; then
-		_open_session "$existing" true
+		_open_session "$existing"
 	else
 		gwta "$branch"
 		local sanitized=${${branch// /-}:l}
@@ -329,7 +359,7 @@ _open_pr() {
 			echo "Error: Failed to find newly created worktree"
 			exit 1
 		fi
-		_open_session "$selected" true
+		_open_session "$selected"
 	fi
 }
 
@@ -469,7 +499,7 @@ query=$(echo "$output" | sed -n '3p')
 case "$selected" in
 	session:*) _switch_session "${selected#session:}" ;;
 	dir:*)     _open_session "${selected#dir:}" ;;
-	wt:*)      _open_session "${selected#wt:}" true ;;
+	wt:*)      _open_session "${selected#wt:}" ;;
 	remote:*)  _open_remote "${selected#remote:}" ;;
 	issue:*)   _open_issue "${selected#issue:}" "$mode" ;;
 	pr:*)      _open_pr "${selected#pr:}" ;;

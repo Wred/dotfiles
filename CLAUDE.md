@@ -17,9 +17,7 @@ The chezmoi source root is `/home/andre/.local/share/chezmoi/home/` (set via `.c
 
 **Removing files:** To have chezmoi delete a file from the target, add its path (relative to `~`) to `home/.chezmoiremove`. Do NOT manually delete deployed files without also adding them here, or they will reappear on the next `chezmoi apply`.
 
-**Applying changes:** After making changes, run the appropriate apply command:
-- Config-only changes (no script modifications): `chezmoi apply --exclude=scripts` — no sudo needed, run this automatically after config edits.
-- Changes that include install scripts: `chezmoi apply` — requires sudo for package installation.
+**Applying changes:** After making changes, run `chezmoi apply` automatically **unless** the change modifies a `.chezmoiscripts` install script (those may install packages and require sudo on Linux). In that case, ask the user before running. On macOS, `chezmoi apply` never needs sudo.
 
 **Install scripts** run in order by filename prefix number:
 - `home/.chezmoiscripts/` — cross-platform (all machines)
