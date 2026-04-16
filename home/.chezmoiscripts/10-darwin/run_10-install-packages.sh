@@ -26,6 +26,7 @@ formulae=(
 	lazygit
 	lsd
 	mike-engel/jwt-cli/jwt-cli
+	mkcert
 	neovim
 	nvm
 	packer
