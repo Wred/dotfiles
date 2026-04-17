@@ -169,6 +169,7 @@ return {
 				"pyright",
 				"jsonls",
 				"yamlls",
+				"helm-ls",
 				"prismals",
 			},
 			registries = {
@@ -197,6 +198,7 @@ return {
 				"json",
 				"make",
 				"prisma",
+				"gotmpl",
 			}
 			return options
 		end,

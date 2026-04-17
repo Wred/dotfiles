@@ -60,5 +60,29 @@ vim.lsp.enable({
 	"pyright",
 	"jsonls",
 	"yamlls",
+	"helm_ls",
 	"prismals",
+})
+
+-- Helm: use gotmpl treesitter parser for helm filetype
+vim.treesitter.language.register("gotmpl", "helm")
+
+-- Helm: register filetype for Helm chart templates
+vim.filetype.add({
+	extension = { tpl = "helm" },
+	pattern = {
+		[".*/templates/.*%.yaml"] = "helm",
+		[".*/templates/.*%.tpl"] = "helm",
+		["helmfile.*%.yaml"] = "helm",
+	},
+})
+
+-- Prevent yamlls from attaching to helm buffers (Go templates break yaml parsing)
+vim.api.nvim_create_autocmd("LspAttach", {
+	callback = function(args)
+		local client = vim.lsp.get_client_by_id(args.data.client_id)
+		if client and client.name == "yamlls" and vim.bo[args.buf].filetype == "helm" then
+			vim.lsp.buf_detach_client(args.buf, args.data.client_id)
+		end
+	end,
 })
