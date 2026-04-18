@@ -14,7 +14,9 @@ config.scrollback_lines = 10000
 config.window_close_confirmation = 'NeverPrompt'
 
 config.max_fps = 120
-config.window_decorations = "RESIZE"
+config.window_background_opacity = 0.5
+config.text_background_opacity = 0.9
+config.window_decorations = "NONE"
 config.window_padding = {
   left = 0,
   right = 0,

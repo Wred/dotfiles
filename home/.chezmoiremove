@@ -2,4 +2,5 @@
 .local/scripts/tmux-sessionizer
 .config/nvim/lua/plugins/avante.lua
 .local/scripts/nav-pane.sh
+.config/hypr/wallpaper.png
 

@@ -36,6 +36,7 @@ packages=(
 	waybar
 	wofi
 	wl-clipboard
+	nautilus
 	pavucontrol
 	wtype
 	krita
