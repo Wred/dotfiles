@@ -49,6 +49,7 @@ formulae=(
 	yazi
 	yq
 	zoxide
+	1password-cli
 )
 
 casks=(
