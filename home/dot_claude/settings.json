@@ -132,7 +132,26 @@
       "Bash(uv publish:*)"
     ]
   },
-  "model": "opus",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "",
+        "hooks": [{"type": "command", "command": "claude-tmux-status.sh set"}]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": "",
+        "hooks": [{"type": "command", "command": "claude-tmux-status.sh clear"}]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [{"type": "command", "command": "claude-tmux-status.sh clear"}]
+      }
+    ]
+  },
   "enabledPlugins": {
     "pyright-lsp@claude-plugins-official": true,
     "rust-analyzer-lsp@claude-plugins-official": true
