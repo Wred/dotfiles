@@ -53,15 +53,18 @@ gwtrm() {
     return 1
   fi
 
+  # Capture main tree path now, before any removal — needed for git commands
+  # that run after the worktree directory is deleted (CWD may become invalid).
+  local main_tree=$(git worktree list | head -1 | awk '{print $1}')
+
   local dir branch
   if [[ -d $arg ]]; then
     # Argument is a worktree path — use it directly and look up the branch
     dir=$arg
-    branch=$(git worktree list | awk -v d="$dir" '$1 == d { gsub(/[\[\]]/, "", $3); print $3 }')
+    branch=$(git -C "$dir" symbolic-ref --short HEAD 2>/dev/null)
   else
     # Argument is a branch name — reconstruct the path
     branch=${${arg// /-}:l}
-    local main_tree=$(git worktree list | head -1 | awk '{print $1}')
     dir="$(dirname $main_tree)/$(basename $main_tree)-$branch"
   fi
 
@@ -85,18 +88,19 @@ gwtrm() {
         echo "Aborted."
         return 0
       fi
-      git worktree remove --force "$dir"
+      git -C "$main_tree" worktree remove --force "$dir"
     else
-      git worktree remove "$dir"
+      git -C "$main_tree" worktree remove "$dir"
     fi
     echo "Worktree removed: $dir:t"
   fi
 
-  git worktree prune
+  git -C "$main_tree" worktree prune
 
-  if [[ -n $branch ]] && git show-ref --verify --quiet "refs/heads/$branch"; then
-    git branch -D "$branch"
-    echo "Branch deleted: $branch"
+  if [[ -n $branch ]]; then
+    git -C "$main_tree" branch -D "$branch" && echo "Branch deleted: $branch"
+  else
+    echo "Note: could not determine branch name, skipping branch deletion"
   fi
 }
 
