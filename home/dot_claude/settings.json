@@ -136,6 +136,14 @@
       "Bash(helm upgrade:*)",
       "Bash(helm dependency:*)"
     ],
+    "deny": [
+      "Read(**/.env)",
+      "Read(**/.envrc)",
+      "Read(**/.env.*)",
+      "Bash(cargo publish:*)",
+      "Bash(pnpm publish:*)",
+      "Bash(uv publish:*)"
+    ],
     "ask": [
       "Bash(gh api:*)",
       "Bash(xargs:*)",
@@ -159,38 +167,46 @@
       "Bash(uv cache clean:*)",
       "Bash(kubectl delete:*)",
       "Bash(helm uninstall:*)"
-    ],
-    "deny": [
-      "Read(**/.env)",
-      "Read(**/.envrc)",
-      "Read(**/.env.*)",
-      "Bash(cargo publish:*)",
-      "Bash(pnpm publish:*)",
-      "Bash(uv publish:*)"
     ]
   },
   "hooks": {
     "PreToolUse": [
       {
         "matcher": "",
-        "hooks": [{"type": "command", "command": "claude-tmux-status.sh set"}]
+        "hooks": [
+          {
+            "type": "command",
+            "command": "claude-tmux-status.sh set"
+          }
+        ]
       }
     ],
     "Notification": [
       {
         "matcher": "",
-        "hooks": [{"type": "command", "command": "claude-tmux-status.sh clear"}]
+        "hooks": [
+          {
+            "type": "command",
+            "command": "claude-tmux-status.sh clear"
+          }
+        ]
       }
     ],
     "Stop": [
       {
         "matcher": "",
-        "hooks": [{"type": "command", "command": "claude-tmux-status.sh clear"}]
+        "hooks": [
+          {
+            "type": "command",
+            "command": "claude-tmux-status.sh clear"
+          }
+        ]
       }
     ]
   },
   "enabledPlugins": {
     "pyright-lsp@claude-plugins-official": true,
     "rust-analyzer-lsp@claude-plugins-official": true
-  }
+  },
+  "skipAutoPermissionPrompt": true
 }
