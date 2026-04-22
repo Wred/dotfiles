@@ -16,7 +16,7 @@ gwta() {
 
   # Use the main worktree path so this works from any worktree
   local main_tree=$(git worktree list | head -1 | awk '{print $1}')
-  local dir="$(dirname $main_tree)/$(basename $main_tree)-$branch"
+  local dir="$(dirname $main_tree)/$(basename $main_tree)-${branch//\//-}"
 
   if git show-ref --verify --quiet "refs/heads/$branch"; then
     git worktree add "$dir" "$branch"
@@ -65,7 +65,7 @@ gwtrm() {
   else
     # Argument is a branch name — reconstruct the path
     branch=${${arg// /-}:l}
-    dir="$(dirname $main_tree)/$(basename $main_tree)-$branch"
+    dir="$(dirname $main_tree)/$(basename $main_tree)-${branch//\//-}"
   fi
 
   if [[ -d $dir ]]; then

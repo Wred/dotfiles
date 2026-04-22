@@ -349,7 +349,7 @@ _open_session() {
 _open_remote() {
 	local remote_branch="$1"
 	gwta "$remote_branch"
-	local sanitized=${${remote_branch// /-}:l}
+	local sanitized=${${${remote_branch// /-}//\//-}:l}
 	local selected=$(git worktree list | grep -F "$sanitized" | awk '{print $1}')
 	if [[ -z $selected ]]; then
 		echo "Error: Failed to find newly created worktree"
@@ -368,7 +368,7 @@ _create_branch() {
 	done
 	echo
 	gwta "$query"
-	local sanitized=${${query// /-}:l}
+	local sanitized=${${${query// /-}//\//-}:l}
 	local selected=$(git worktree list | grep -F "$sanitized" | awk '{print $1}')
 	if [[ -z $selected ]]; then
 		echo "Error: Failed to find newly created worktree"
@@ -393,7 +393,7 @@ _open_pr() {
 		_open_session "$existing"
 	else
 		gwta "$branch"
-		local sanitized=${${branch// /-}:l}
+		local sanitized=${${${branch// /-}//\//-}:l}
 		local selected=$(git worktree list | grep -F "$sanitized" | awk '{print $1}')
 		if [[ -z $selected ]]; then
 			echo "Error: Failed to find newly created worktree"
@@ -439,7 +439,7 @@ _open_issue() {
 		echo "Reusing existing worktree: $selected"
 	else
 		gwta "$branch"
-		local sanitized=${${branch// /-}:l}
+		local sanitized=${${${branch// /-}//\//-}:l}
 		selected=$(git worktree list | grep -F "$sanitized" | awk '{print $1}')
 		if [[ -z $selected ]]; then
 			echo "Error: Failed to find newly created worktree"

@@ -136,7 +136,7 @@ else
 	gwta "$branch"
 
 	# Resolve the new worktree path the same way tmux-worktree.sh does.
-	sanitized=${${branch// /-}:l}
+	sanitized=${${${branch// /-}//\//-}:l}
 	selected=$(git worktree list | grep -F "$sanitized" | awk '{print $1}')
 	if [[ -z $selected ]]; then
 		echo "Error: Failed to find newly created worktree"

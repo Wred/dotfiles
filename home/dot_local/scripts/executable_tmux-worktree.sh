@@ -68,7 +68,7 @@ if [[ $match == remote:* ]]; then
 	local remote_branch=${match#remote:}
 	gwta "$remote_branch"
 
-	local sanitized=${${remote_branch// /-}:l}
+	local sanitized=${${${remote_branch// /-}//\//-}:l}
 	selected=$(git worktree list | grep -F "$sanitized" | awk '{print $1}')
 	if [[ -z $selected ]]; then
 		echo "Error: Failed to find newly created worktree"
@@ -90,7 +90,7 @@ elif [[ -n $query ]]; then
 	gwta "$query"
 
 	# Resolve the new worktree path using the sanitized branch name
-	local sanitized=${${query// /-}:l}
+	local sanitized=${${${query// /-}//\//-}:l}
 	selected=$(git worktree list | grep -F "$sanitized" | awk '{print $1}')
 	if [[ -z $selected ]]; then
 		echo "Error: Failed to find newly created worktree"
