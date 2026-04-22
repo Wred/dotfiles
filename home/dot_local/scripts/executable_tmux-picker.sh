@@ -67,12 +67,13 @@ _list_worktrees() {
 	git worktree list | while read -r line; do
 		[[ $line == *prunable\] ]] && continue
 		local wt_path=${line%% *}
+		local folder=${wt_path:t}
 		local branch_field=${line##* }
 		local branch=${branch_field//[\[\]]/}
 		if echo "$active_paths" | grep -qxF "$wt_path" 2>/dev/null; then
-			printf 'wt:%s\t\033[33m%s\033[0m\n' "$wt_path" "$branch"
+			printf 'wt:%s\t\033[33m%s  \033[2m%s\033[0m\n' "$wt_path" "$branch" "$folder"
 		else
-			printf 'wt:%s\t%s\n' "$wt_path" "$branch"
+			printf 'wt:%s\t%s  \033[2m%s\033[0m\n' "$wt_path" "$branch" "$folder"
 		fi
 	done
 

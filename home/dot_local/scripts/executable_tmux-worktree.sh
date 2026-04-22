@@ -22,9 +22,9 @@ while true; do
 		branch_field=${line##* }
 		branch=${branch_field//[\[\]]/}
 		if tmux has-session -t="$session" 2>/dev/null; then
-			echo "${wt_path}"$'\t'$'\033[33m'"${branch}"$'\033[0m'
+			printf '%s\t\033[33m%s  \033[2m%s\033[0m\n' "$wt_path" "$branch" "$folder"
 		else
-			echo "${wt_path}"$'\t'"${branch}"
+			printf '%s\t%s  \033[2m%s\033[0m\n' "$wt_path" "$branch" "$folder"
 		fi
 	done)
 

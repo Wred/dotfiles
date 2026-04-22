@@ -97,8 +97,14 @@ gwtrm() {
 
   git -C "$main_tree" worktree prune
 
-  if [[ -n $branch ]]; then
+  # Determine the repo's main/default branch to avoid deleting it
+  local main_branch
+  main_branch=$(git -C "$main_tree" symbolic-ref --short HEAD 2>/dev/null)
+
+  if [[ -n $branch && $branch != "$main_branch" ]]; then
     git -C "$main_tree" branch -D "$branch" && echo "Branch deleted: $branch"
+  elif [[ $branch == "$main_branch" ]]; then
+    echo "Note: worktree was on '$branch' (default branch), skipping branch deletion"
   else
     echo "Note: could not determine branch name, skipping branch deletion"
   fi
