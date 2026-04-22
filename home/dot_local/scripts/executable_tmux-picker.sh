@@ -33,9 +33,9 @@ _record_dir_history() {
 
 _list_sessions() {
 	local active_paths=$(tmux list-sessions -F '#{session_path}' 2>/dev/null || true)
-	tmux list-sessions -F '#{session_name}' 2>/dev/null \
-		| while IFS= read -r session_name; do
-			printf 'session:%s\t\033[33m%s\033[0m\n' "$session_name" "$session_name"
+	tmux list-sessions -F '#{session_name}:#{session_path}' 2>/dev/null \
+		| while IFS=: read -r session_name session_path; do
+			printf 'session:%s:%s\t\033[33m%s\033[0m\n' "$session_name" "$session_path" "$session_name"
 		done
 	if [[ -f $_HIST_FILE ]]; then
 		while IFS= read -r dir; do
@@ -191,9 +191,10 @@ _tab_header() {
 	local tabs="${s} s:Sessions ${reset}  ${d} f:Dirs ${reset}  ${w} w:Worktrees ${reset}  ${i} i:Issues ${reset}  ${p} p:PRs ${reset}"
 	local hints
 	case $active in
-		worktrees) hints="ctrl-x: delete · ctrl-h/l: switch" ;;
-		issues)    hints="ctrl-a: autonomous · ctrl-h/l: switch" ;;
-		prs)       hints="ctrl-h/l: switch" ;;
+		worktrees) hints="ctrl-x: delete · ctrl-o: open browser · ctrl-h/l: switch" ;;
+		issues)    hints="ctrl-a: autonomous · ctrl-o: open browser · ctrl-h/l: switch" ;;
+		prs)       hints="ctrl-o: open browser · ctrl-h/l: switch" ;;
+		sessions)  hints="ctrl-o: open browser (git repos) · ctrl-h/l: switch" ;;
 		*)         hints="ctrl-h/l: switch" ;;
 	esac
 	printf '%s\n%s' "$tabs" "$hints"
@@ -249,6 +250,44 @@ _on_ctrl_a() {
 _on_ctrl_x() {
 	[[ "$1" == "Worktrees> " ]] && \
 		echo "execute($TMUX_PICKER --delete-wt {1})+reload($TMUX_PICKER --list-worktrees)"
+}
+
+_on_ctrl_o() {
+	echo "on_ctrl_o called: [$1]" >> /tmp/tmux-picker-debug.log
+	case "$1" in
+		"Sessions> ")  echo "execute($TMUX_PICKER --open-browser {1})" ;;
+		"Issues> ")    echo "execute($TMUX_PICKER --open-browser {1})" ;;
+		"PRs> ")       echo "execute($TMUX_PICKER --open-browser {1})" ;;
+		"Worktrees> ") echo "execute($TMUX_PICKER --open-browser {1})" ;;
+	esac
+}
+
+_open_browser() {
+	local selected="$1"
+	case "$selected" in
+		issue:*) gh issue view --web "${selected#issue:}" ;;
+		pr:*)    gh pr view --web "${selected#pr:}" ;;
+		session:*)
+			local rest="${selected#session:}"
+			local repo_path="${rest#*:}"
+			local branch=$(git -C "$repo_path" branch --show-current 2>/dev/null)
+			[[ -n $branch ]] && (cd "$repo_path" && gh browse --branch "$branch")
+			;;
+		dir:*)
+			local repo_path="${selected#dir:}"
+			local branch=$(git -C "$repo_path" branch --show-current 2>/dev/null)
+			[[ -n $branch ]] && (cd "$repo_path" && gh browse --branch "$branch")
+			;;
+		wt:*)
+			local wt_path="${selected#wt:}"
+			local branch=$(git -C "$wt_path" branch --show-current 2>/dev/null)
+			[[ -n $branch ]] && (cd "$wt_path" && gh browse --branch "$branch")
+			;;
+		remote:*)
+			local branch="${selected#remote:}"
+			gh browse --branch "$branch"
+			;;
+	esac
 }
 
 # ─── Worktree delete (runs inside fzf execute) ──────────────────────
@@ -453,6 +492,8 @@ case "${1:-}" in
 	--on-enter)       _on_enter "$2";              exit ;;
 	--on-ctrl-a)      _on_ctrl_a "$2";             exit ;;
 	--on-ctrl-x)      _on_ctrl_x "$2";             exit ;;
+	--on-ctrl-o)      _on_ctrl_o "$2";             exit ;;
+	--open-browser)   _open_browser "$2";          exit ;;
 esac
 
 # ─── Main ───────────────────────────────────────────────────────────
@@ -465,24 +506,39 @@ _common_binds=(
 	--bind 'enter:transform:$TMUX_PICKER --on-enter "$FZF_PROMPT"'
 )
 
+# Pre-generate sessions list and find current session's position for initial cursor placement
+_sessions_list=$("$SELF" --list-sessions)
+_current_session_pos=1
+if [[ -n $TMUX ]]; then
+	_current=$(tmux display-message -p '#S' 2>/dev/null)
+	_pos=0
+	while IFS= read -r _line; do
+		(( _pos++ ))
+		[[ $_line == "session:${_current}:"* ]] && _current_session_pos=$_pos && break
+	done <<< "$_sessions_list"
+fi
+
 if git rev-parse --git-dir &>/dev/null; then
-	output=$("$SELF" --list-sessions | fzf --ansi \
+	output=$(echo "$_sessions_list" | fzf --ansi \
 		--delimiter=$'\t' --with-nth=2 \
 		--prompt 'Sessions> ' \
 		--header "$("$SELF" --tab-header sessions)" \
 		"${_common_binds[@]}" \
+		--bind "load:pos($_current_session_pos)+unbind(load)" \
 		--bind 'ctrl-w:transform:$TMUX_PICKER --switch-tab worktrees' \
 		--bind 'ctrl-i:transform:$TMUX_PICKER --switch-tab issues' \
 		--bind 'ctrl-p:transform:$TMUX_PICKER --switch-tab prs' \
 		--bind 'ctrl-x:transform:$TMUX_PICKER --on-ctrl-x "$FZF_PROMPT"' \
 		--bind 'ctrl-a:transform:$TMUX_PICKER --on-ctrl-a "$FZF_PROMPT"' \
+		--bind 'ctrl-o:transform:$TMUX_PICKER --on-ctrl-o "$FZF_PROMPT"' \
 	)
 else
-	output=$("$SELF" --list-sessions | fzf --ansi \
+	output=$(echo "$_sessions_list" | fzf --ansi \
 		--delimiter=$'\t' --with-nth=2 \
 		--prompt 'Sessions> ' \
 		--header "$("$SELF" --tab-header sessions)" \
 		"${_common_binds[@]}" \
+		--bind "load:pos($_current_session_pos)+unbind(load)" \
 	)
 fi
 
@@ -497,7 +553,7 @@ selected=$(echo "$output" | sed -n '2p')
 query=$(echo "$output" | sed -n '3p')
 
 case "$selected" in
-	session:*) _switch_session "${selected#session:}" ;;
+	session:*) _switch_session "${${selected#session:}%%:*}" ;;
 	dir:*)     _open_session "${selected#dir:}" ;;
 	wt:*)      _open_session "${selected#wt:}" ;;
 	remote:*)  _open_remote "${selected#remote:}" ;;
