@@ -6,6 +6,7 @@ formulae=(
 	coreutils
 	curl
 	direnv
+	dnsmasq
 	dive
 	dockutil
 	dust
