@@ -54,7 +54,7 @@ formulae=(
 )
 
 casks=(
-	## docker
+	docker
 	## google-chrome
 	## nikitabobko/tap/aerospace
 	## visual-studio-code
