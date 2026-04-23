@@ -8,6 +8,7 @@ brew install \
 	helmify \
 	kubernetes-cli \
 	kind \
+	k3d \
 	kustomize \
 	k9s \
 	lens \
