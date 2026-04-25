@@ -263,6 +263,19 @@ _on_ctrl_o() {
 	esac
 }
 
+_browse_repo() {
+	# Open PR if branch has one, otherwise open branch in browser
+	local repo_path="$1"
+	local branch="$2"
+	local pr_number
+	pr_number=$(cd "$repo_path" && gh pr view --json number --jq '.number' 2>/dev/null)
+	if [[ -n $pr_number ]]; then
+		(cd "$repo_path" && gh pr view --web)
+	else
+		(cd "$repo_path" && gh browse --branch "$branch")
+	fi
+}
+
 _open_browser() {
 	local selected="$1"
 	case "$selected" in
@@ -272,21 +285,27 @@ _open_browser() {
 			local rest="${selected#session:}"
 			local repo_path="${rest#*:}"
 			local branch=$(git -C "$repo_path" branch --show-current 2>/dev/null)
-			[[ -n $branch ]] && (cd "$repo_path" && gh browse --branch "$branch")
+			[[ -n $branch ]] && _browse_repo "$repo_path" "$branch"
 			;;
 		dir:*)
 			local repo_path="${selected#dir:}"
 			local branch=$(git -C "$repo_path" branch --show-current 2>/dev/null)
-			[[ -n $branch ]] && (cd "$repo_path" && gh browse --branch "$branch")
+			[[ -n $branch ]] && _browse_repo "$repo_path" "$branch"
 			;;
 		wt:*)
 			local wt_path="${selected#wt:}"
 			local branch=$(git -C "$wt_path" branch --show-current 2>/dev/null)
-			[[ -n $branch ]] && (cd "$wt_path" && gh browse --branch "$branch")
+			[[ -n $branch ]] && _browse_repo "$wt_path" "$branch"
 			;;
 		remote:*)
 			local branch="${selected#remote:}"
-			gh browse --branch "$branch"
+			local pr_number
+			pr_number=$(gh pr view "$branch" --json number --jq '.number' 2>/dev/null)
+			if [[ -n $pr_number ]]; then
+				gh pr view --web "$branch"
+			else
+				gh browse --branch "$branch"
+			fi
 			;;
 	esac
 }
