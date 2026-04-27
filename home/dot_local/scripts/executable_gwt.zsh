@@ -23,7 +23,23 @@ gwta() {
   elif git show-ref --verify --quiet "refs/remotes/origin/$branch"; then
     git worktree add "$dir" -b "$branch" "origin/$branch"
   else
-    git worktree add "$dir" -b "$branch"
+    # New branch — always base on the repo's default branch, not current HEAD
+    local default_branch
+    default_branch=$(git -C "$main_tree" symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null)
+    default_branch=${default_branch#origin/}
+    if [[ -z $default_branch ]]; then
+      for candidate in main master; do
+        if git -C "$main_tree" show-ref --verify --quiet "refs/remotes/origin/$candidate"; then
+          default_branch=$candidate
+          break
+        fi
+      done
+    fi
+    if [[ -n $default_branch ]]; then
+      git worktree add "$dir" -b "$branch" "origin/$default_branch"
+    else
+      git worktree add "$dir" -b "$branch"
+    fi
   fi
 
   echo "Worktree created at: $dir"

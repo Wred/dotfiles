@@ -23,15 +23,16 @@ agent=${CODING_AGENT:-claude}
 agent_cmd="$agent --continue || $agent"
 if [[ -n $issue ]]; then
 	if [[ $mode == "autonomous" ]]; then
-		agent_cmd="$agent 'GitHub issue #${issue}. Read it with: gh issue view ${issue} --json title,body,labels,url. Assign the issue to yourself with gh issue edit ${issue} --add-assignee @me and comment that you have started working on it. Then work it end-to-end: implement, test, commit on the current branch, push, and open a draft PR with gh pr create --draft. If acceptance criteria are ambiguous or you hit a blocking decision, stop and ask rather than guessing.'"
+		prompt="GitHub issue #${issue}. Read it with: gh issue view ${issue} --json title,body,labels,url. Assign the issue to yourself with gh issue edit ${issue} --add-assignee @me and comment that you have started working on it. Then work it end-to-end: implement, test, commit on the current branch, push, and open a draft PR with gh pr create --draft. If acceptance criteria are ambiguous or you hit a blocking decision, stop and ask rather than guessing."
 	else
-		agent_cmd="$agent 'GitHub issue #${issue}. Read it with: gh issue view ${issue} --json title,body,labels,url. Summarize it back to me, then ask if I want to assign the issue to myself and start working on it.'"
+		prompt="GitHub issue #${issue}. Read it with: gh issue view ${issue} --json title,body,labels,url. Summarize it back to me, then ask if I want to assign the issue to myself and start working on it."
 	fi
+	agent_cmd="$agent ${(q)prompt}"
 fi
 
 # Split: claude on the right (50% width)
 # Use direnv exec to inherit .envrc environment (e.g. KUBECONFIG)
-tmux split-window -h -p 50 "direnv exec . zsh -ic '${agent_cmd}'"
+tmux split-window -h -p 50 "direnv exec . zsh -ic ${(q)agent_cmd}"
 
 # Start nvim in this pane (the left/original pane where the script is running)
 nvim
