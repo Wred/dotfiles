@@ -213,7 +213,18 @@ _switch_tab() {
 	case $tab in
 		sessions)  echo "change-prompt(Sessions> )+reload($TMUX_PICKER --list-sessions)+transform-header($TMUX_PICKER --tab-header sessions)+clear-query" ;;
 		dirs)      echo "change-prompt(Directories> )+reload($TMUX_PICKER --list-dirs)+transform-header($TMUX_PICKER --tab-header dirs)+clear-query" ;;
-		worktrees) echo "change-prompt(Worktrees> )+reload($TMUX_PICKER --list-worktrees)+transform-header($TMUX_PICKER --tab-header worktrees)+clear-query" ;;
+		worktrees)
+			local current_wt pos=1
+			current_wt=$(git rev-parse --show-toplevel 2>/dev/null)
+			if [[ -n $current_wt ]]; then
+				local i=0
+				while IFS= read -r line; do
+					(( i++ ))
+					[[ ${line%%$'\t'*} == "wt:${current_wt}" ]] && pos=$i && break
+				done < <("$TMUX_PICKER" --list-worktrees 2>/dev/null)
+			fi
+			echo "change-prompt(Worktrees> )+reload-sync($TMUX_PICKER --list-worktrees)+transform-header($TMUX_PICKER --tab-header worktrees)+clear-query+pos($pos)"
+			;;
 		issues)    echo "change-prompt(Issues> )+reload-sync($TMUX_PICKER --list-issues)+transform-header($TMUX_PICKER --tab-header issues)+clear-query" ;;
 		prs)       echo "change-prompt(PRs> )+reload-sync($TMUX_PICKER --list-prs)+transform-header($TMUX_PICKER --tab-header prs)+clear-query" ;;
 	esac
@@ -269,7 +280,7 @@ _on_ctrl_a() {
 
 _on_ctrl_x() {
 	[[ "$1" == "Worktrees> " ]] && \
-		echo "execute($TMUX_PICKER --delete-wt {1})+reload($TMUX_PICKER --list-worktrees)"
+		echo "execute($TMUX_PICKER --delete-wt {1})+abort"
 }
 
 _on_ctrl_o() {
@@ -338,7 +349,14 @@ _delete_wt() {
 		sleep 1
 		return
 	fi
-	gwtrm "${raw#wt:}"
+	local wt_path="${raw#wt:}"
+	local session_name=$(basename "$wt_path" | tr . _)
+	gwtrm "$wt_path"
+	if [[ ! -d $wt_path ]] && tmux has-session -t="$session_name" 2>/dev/null; then
+		tmux kill-session -t "$session_name"
+		echo "Session '$session_name' killed."
+		sleep 0.5
+	fi
 }
 
 # ─── Session handlers ───────────────────────────────────────────────
