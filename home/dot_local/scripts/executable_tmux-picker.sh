@@ -189,7 +189,12 @@ _tab_header() {
 	[[ $active == worktrees ]] && w=$on || w=$off
 	[[ $active == issues ]]    && i=$on || i=$off
 	[[ $active == prs ]]       && p=$on || p=$off
-	local tabs="${s} s:Sessions ${reset}  ${d} f:Dirs ${reset}  ${w} w:Worktrees ${reset}  ${i} i:Issues ${reset}  ${p} p:PRs ${reset}"
+	local tabs
+	if git rev-parse --git-dir &>/dev/null; then
+		tabs="${s} s:Sessions ${reset}  ${d} f:Dirs ${reset}  ${w} w:Worktrees ${reset}  ${i} i:Issues ${reset}  ${p} p:PRs ${reset}"
+	else
+		tabs="${s} s:Sessions ${reset}  ${d} f:Dirs ${reset}"
+	fi
 	local hints
 	case $active in
 		worktrees) hints="ctrl-x: delete · ctrl-o: open browser · ctrl-h/l: switch" ;;
@@ -215,23 +220,37 @@ _switch_tab() {
 }
 
 _cycle_left() {
-	case "$1" in
-		"Sessions> ")    _switch_tab prs ;;
-		"Directories> ") _switch_tab sessions ;;
-		"Worktrees> ")   _switch_tab dirs ;;
-		"Issues> ")      _switch_tab worktrees ;;
-		"PRs> ")         _switch_tab issues ;;
-	esac
+	if git rev-parse --git-dir &>/dev/null; then
+		case "$1" in
+			"Sessions> ")    _switch_tab prs ;;
+			"Directories> ") _switch_tab sessions ;;
+			"Worktrees> ")   _switch_tab dirs ;;
+			"Issues> ")      _switch_tab worktrees ;;
+			"PRs> ")         _switch_tab issues ;;
+		esac
+	else
+		case "$1" in
+			"Sessions> ")    _switch_tab dirs ;;
+			"Directories> ") _switch_tab sessions ;;
+		esac
+	fi
 }
 
 _cycle_right() {
-	case "$1" in
-		"Sessions> ")    _switch_tab dirs ;;
-		"Directories> ") _switch_tab worktrees ;;
-		"Worktrees> ")   _switch_tab issues ;;
-		"Issues> ")      _switch_tab prs ;;
-		"PRs> ")         _switch_tab dirs ;;
-	esac
+	if git rev-parse --git-dir &>/dev/null; then
+		case "$1" in
+			"Sessions> ")    _switch_tab dirs ;;
+			"Directories> ") _switch_tab worktrees ;;
+			"Worktrees> ")   _switch_tab issues ;;
+			"Issues> ")      _switch_tab prs ;;
+			"PRs> ")         _switch_tab dirs ;;
+		esac
+	else
+		case "$1" in
+			"Sessions> ")    _switch_tab dirs ;;
+			"Directories> ") _switch_tab sessions ;;
+		esac
+	fi
 }
 
 _on_enter() {
